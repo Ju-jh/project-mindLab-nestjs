@@ -15,6 +15,7 @@ export class UserController {
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res) {
     const accessToken = this.generateAccessToken(req.user);
+    console.log('TEST');
     res.cookie('accessToken', accessToken, {
       httpOnly: true,
       path: '/',
