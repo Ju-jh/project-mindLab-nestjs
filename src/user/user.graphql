@@ -1,0 +1,22 @@
+type User {
+  id: ID!
+  email: String!
+  surveys: [Survey]
+  answers: [Answer]
+}
+
+type Survey {
+  id: ID!
+}
+
+type Answer {
+  id: ID!
+}
+
+type Query {
+  getUser(id: ID!): User
+}
+
+type Mutation {
+  addSurvey(title: String!): Survey
+}

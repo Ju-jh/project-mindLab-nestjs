@@ -1,0 +1,29 @@
+# src/question/question.graphql
+
+type Question {
+  id: ID!
+  text: String!
+  survey: Survey!
+  options: [Option]
+  answers: [Answer]
+}
+
+type Survey {
+  id: ID!
+}
+
+type Option {
+  id: ID!
+}
+
+type Answer {
+  id: ID!
+}
+
+type Query {
+  getQuestion(id: ID!): Question
+}
+
+type Mutation {
+  addSurvey(title: String!): Survey
+}
