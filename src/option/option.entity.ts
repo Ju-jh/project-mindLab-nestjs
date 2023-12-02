@@ -1,4 +1,4 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Answer } from 'src/answer/answer.entity';
 import { Question } from 'src/question/question.entity';
 import {
@@ -10,8 +10,9 @@ import {
 } from 'typeorm';
 
 @Entity()
+@ObjectType()
 export class Option {
-  @Field(() => Int)
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 

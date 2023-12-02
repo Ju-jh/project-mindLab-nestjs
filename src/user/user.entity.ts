@@ -1,11 +1,12 @@
-import { Field, Int } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Answer } from 'src/answer/answer.entity';
 import { Survey } from 'src/survey/survey.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
 @Entity()
+@ObjectType()
 export class User {
-  @Field(() => Int)
+  @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -13,11 +14,15 @@ export class User {
   @Column()
   email: string;
 
-  @Field(() => Survey)
-  @OneToMany(() => Survey, (survey) => survey.user)
+  @Field()
+  @Column()
+  photo: string;
+
+  @Field(() => [Survey], { nullable: true })
+  @OneToMany(() => Survey, (survey) => survey.user, { nullable: true })
   surveys: Survey[];
 
-  @Field(() => Answer)
-  @OneToMany(() => Answer, (answer) => answer.user)
+  @Field(() => [Answer], { nullable: true })
+  @OneToMany(() => Answer, (answer) => answer.user, { nullable: true })
   answers: Answer[];
 }

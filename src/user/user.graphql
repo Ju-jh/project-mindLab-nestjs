@@ -1,6 +1,7 @@
 type User {
   id: ID!
   email: String!
+  photo: String!
   surveys: [Survey]
   answers: [Answer]
 }
@@ -14,9 +15,10 @@ type Answer {
 }
 
 type Query {
-  getUser(id: ID!): User
+  getUser(email: String!, photo: String!): User
+  getUserEmail(email: String!): User
 }
 
 type Mutation {
-  addSurvey(title: String!): Survey
+  createUser(id: ID!, email: String!, photo: String!): User
 }

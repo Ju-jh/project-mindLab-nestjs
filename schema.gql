@@ -2,6 +2,62 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Option {
+  id: ID!
+  text: String!
+  score: Float!
+  question: Question!
+  answers: Answer!
+}
+
+type User {
+  id: ID!
+  email: String!
+  photo: String!
+  surveys: [Survey!]
+  answers: [Answer!]
+}
+
+type Survey {
+  id: ID!
+  title: String!
+  user: User!
+  questions: Question!
+  answers: Answer!
+}
+
+type Answer {
+  id: ID!
+  user: User!
+  survey: Survey!
+  question: Question!
+  option: Option!
+  createdAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Question {
+  id: ID!
+  text: String!
+  survey: Survey!
+  options: Option!
+  answers: Answer!
+}
+
 type Query {
-  userName: String!
+  isPizzaGood: Boolean!
+  getUser(email: String!): User!
+}
+
+type Mutation {
+  createUser(input: UserInput!): User!
+}
+
+input UserInput {
+  email: String!
+  photo: String!
 }

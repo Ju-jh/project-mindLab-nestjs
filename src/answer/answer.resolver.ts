@@ -1,4 +1,9 @@
-import { Resolver } from '@nestjs/graphql';
+import { Query, Resolver } from '@nestjs/graphql';
 
 @Resolver()
-export class AnswerResolver {}
+export class AnswerResolver {
+  @Query(() => Boolean)
+  isPizzaGood(): boolean {
+    return true;
+  }
+}
