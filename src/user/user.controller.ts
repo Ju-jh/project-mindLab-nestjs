@@ -31,6 +31,7 @@ export class UserController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res) {
+    console.log(req, '여기가 req');
     try {
       const accessToken = this.generateAccessToken(req.user);
       res.cookie('accessToken', accessToken, {
