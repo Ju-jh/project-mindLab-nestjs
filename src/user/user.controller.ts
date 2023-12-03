@@ -36,7 +36,7 @@ export class UserController {
         httpOnly: true,
         path: '/',
       });
-      res.redirect(`${process.env.FRONTEND_BASEURL}`);
+      res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
       console.error('Error in googleLoginCallback:', error);
       res.status(500).send('Internal Server Error');
