@@ -8,7 +8,10 @@ import * as dotenv from 'dotenv';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { SurveyModule } from './survey/survey.module';
+import { Client } from 'pg';
+
 dotenv.config();
+
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -20,6 +23,9 @@ dotenv.config();
       database: process.env.DB_DATABASE,
       entities: [__dirname + '/**/*.entity{.ts,.js}'],
       synchronize: true,
+      extra: {
+        ssl: false,
+      },
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       autoSchemaFile: 'schema.gql',
@@ -32,4 +38,26 @@ dotenv.config();
     AnswerModule,
   ],
 })
-export class AppModule {}
+export class AppModule {
+  constructor() {
+    const client = new Client({
+      connectionString: process.env.DATABASE_URL,
+      ssl: {
+        rejectUnauthorized: false,
+      },
+    });
+
+    client.connect();
+
+    client.query(
+      'SELECT table_schema,table_name FROM information_schema.tables;',
+      (err, res) => {
+        if (err) throw err;
+        for (const row of res.rows) {
+          console.log(JSON.stringify(row));
+        }
+        client.end();
+      },
+    );
+  }
+}
