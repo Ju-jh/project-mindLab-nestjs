@@ -46,7 +46,7 @@ export class UserService {
       return user;
     } catch (error) {
       console.error('Error in getUser:', error);
-      throw new NotFoundException(`User with email ${email} not found`);
+      return null;
     }
   }
 }

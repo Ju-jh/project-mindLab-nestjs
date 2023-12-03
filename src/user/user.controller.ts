@@ -36,6 +36,7 @@ export class UserController {
         httpOnly: true,
         path: '/',
       });
+      console.log('accessToken 발급완료');
       res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
       console.error('Error in googleLoginCallback:', error);
