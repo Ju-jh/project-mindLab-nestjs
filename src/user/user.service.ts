@@ -26,13 +26,13 @@ export class UserService {
 
   async findByEmailOrSave(data: UserInput): Promise<User> {
     const isUser = await this.getUser(data.email);
-    try {
-      if (!isUser) {
-        const user = this.userRepository.create(data as Partial<User>);
-        return await this.userRepository.save(user);
-      }
-    } catch (error) {
-      this.handleQueryError('createUser', data['id'], error);
+    if (!isUser) {
+      const user = this.userRepository.create(data as Partial<User>);
+      return await this.userRepository.save(user);
+    } else {
+      const user = this.getUser(data.email);
+      console.log(user, '여기가olduser');
+      return user;
     }
   }
 
