@@ -24,7 +24,7 @@ export class UserService {
     );
   }
 
-  async createUser(data: UserInput): Promise<User> {
+  async findByEmailOrSave(data: UserInput): Promise<User> {
     const isUser = await this.getUser(data.email);
     try {
       if (!isUser) {

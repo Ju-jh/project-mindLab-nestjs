@@ -32,7 +32,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     const email = emails[0].value;
     const photo = photos[0].value;
     try {
-      const user: User = await this.userService.createUser({ email, photo });
+      const user: User = await this.userService.findByEmailOrSave({
+        email,
+        photo,
+      });
       done(null, user);
     } catch (error) {
       done(error, false);
