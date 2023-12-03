@@ -25,9 +25,12 @@ export class UserService {
   }
 
   async createUser(data: UserInput): Promise<User> {
+    const isUser = await this.getUser(data.email);
     try {
-      const user = this.userRepository.create(data as Partial<User>);
-      return await this.userRepository.save(user);
+      if (!isUser) {
+        const user = this.userRepository.create(data as Partial<User>);
+        return await this.userRepository.save(user);
+      }
     } catch (error) {
       this.handleQueryError('createUser', data['id'], error);
     }
@@ -38,7 +41,7 @@ export class UserService {
       const user = await this.userRepository.findOne({ where: { email } });
 
       if (!email) {
-        throw new NotFoundException(`Survey with id ${email} not found`);
+        throw new NotFoundException(`user with email ${email} not found`);
       }
       return user;
     } catch (error) {
