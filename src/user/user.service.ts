@@ -32,7 +32,7 @@ export class UserService {
     } else {
       const user = this.getUser(data.email);
       console.log(user, '여기가olduser');
-      return user;
+      return await user;
     }
   }
 
