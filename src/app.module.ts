@@ -8,8 +8,6 @@ import * as dotenv from 'dotenv';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriverConfig, ApolloDriver } from '@nestjs/apollo';
 import { SurveyModule } from './survey/survey.module';
-import { AppService } from './app.service';
-
 dotenv.config();
 @Module({
   imports: [
@@ -33,6 +31,5 @@ dotenv.config();
     UserModule,
     AnswerModule,
   ],
-  controllers: [AppService],
 })
 export class AppModule {}
