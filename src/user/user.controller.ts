@@ -103,4 +103,10 @@ export class UserController {
       }
     }
   }
+
+  @Get('logout')
+  async logout(@Res() res) {
+    res.clearCookie('accessToken', { path: '/' });
+    res.redirect('https://mind-lab-fe-55b3987890a9.herokuapp.com/');
+  }
 }
