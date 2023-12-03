@@ -30,12 +30,17 @@ export class UserController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res) {
-    const accessToken = this.generateAccessToken(req.user);
-    res.cookie('accessToken', accessToken, {
-      httpOnly: true,
-      path: '/',
-    });
-    res.redirect(`${process.env.FRONTEND_BASEURL}`);
+    try {
+      const accessToken = this.generateAccessToken(req.user);
+      res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        path: '/',
+      });
+      res.redirect(`${process.env.FRONTEND_BASEURL}`);
+    } catch (error) {
+      console.error('Error in googleLoginCallback:', error);
+      res.status(500).send('Internal Server Error');
+    }
   }
 
   @Post('cookie')
