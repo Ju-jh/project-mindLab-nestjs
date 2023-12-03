@@ -31,14 +31,12 @@ export class UserController {
   @Get('google/callback')
   @UseGuards(AuthGuard('google'))
   async googleLoginCallback(@Req() req, @Res() res) {
-    console.log(req, '여기가 req');
     try {
       const accessToken = this.generateAccessToken(req.user);
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
       });
-      console.log('accessToken 발급완료');
       res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
       console.error('Error in googleLoginCallback:', error);
@@ -49,16 +47,17 @@ export class UserController {
   @Post('cookie')
   async getCookie(@Headers('cookie') cookie: string, @Res() res): Promise<any> {
     const cookies = cookie ? cookie.split(';') : [];
+    console.log(cookies, '여기가 cookies');
     let isCookie = false;
 
     for (const cookie of cookies) {
       const [name] = cookie.trim().split('=');
       if (name === 'accessToken') {
         isCookie = true;
+        console.log(name, 'name');
         break;
       }
     }
-
     res.json({ isCookie });
   }
 
