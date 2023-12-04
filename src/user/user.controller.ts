@@ -83,6 +83,8 @@ export class UserController {
             const email = decodedToken.user.email;
             const user = await this.userService.getUser(email);
 
+            console.log(user, 'controller의 user console.log');
+
             if (user) {
               res.status(200).json({
                 email: user.email,
