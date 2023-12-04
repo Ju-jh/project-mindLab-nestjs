@@ -66,7 +66,8 @@ export class UserController {
   ): Promise<any> {
     try {
       const result = await this.userService.getEmailAndPhotoByCookie(cookie);
-      res.status(200).json(result);
+      console.log(result, '여기가 백엔드 result controller');
+      await res.status(200).json(result);
     } catch (error) {
       console.error('Error in getEmailAndPhotoByCookie:', error);
       res.status(500).json({ error: 'Internal Server Error' });
