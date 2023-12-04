@@ -47,6 +47,8 @@ export class UserController {
   @Post('cookie')
   async getCookie(@Headers() headers, @Res() res): Promise<any> {
     console.log(headers, '여기가 headers');
+    const cookieHeader = headers['cookie'];
+    console.log(cookieHeader, '쿠키 헤더');
     // const cookies = cookie ? cookie.split(';') : [];
     // console.log(cookies, '여기가 cookies');
     // let isCookie = false;
