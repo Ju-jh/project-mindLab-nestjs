@@ -64,7 +64,13 @@ export class UserController {
     @Headers('cookie') cookie: string,
     @Res() res,
   ): Promise<any> {
-    res(this.userService.getEmailAndPhotoByCookie(cookie));
+    try {
+      const result = await this.userService.getEmailAndPhotoByCookie(cookie);
+      res.status(200).json(result);
+    } catch (error) {
+      console.error('Error in getEmailAndPhotoByCookie:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
   }
 
   @Get('logout')
