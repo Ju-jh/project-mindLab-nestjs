@@ -35,6 +35,8 @@ export class UserController {
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
+        sameSite: 'None',
+        secure: true,
       });
       res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
