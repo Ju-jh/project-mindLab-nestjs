@@ -30,6 +30,7 @@
     "@nestjs/platform-express": "^9.0.0",
     "@nestjs/typeorm": "^10.0.1",
     "apollo-server-express": "^3.13.0",
+    "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "graphql": "^16.8.1",
     "graphql-tools": "^9.0.0",
