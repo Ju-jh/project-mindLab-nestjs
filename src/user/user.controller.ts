@@ -12,6 +12,7 @@ import { JwtPayload, verify, sign } from 'jsonwebtoken';
 import { UserService } from './user.service';
 interface UserPayload extends JwtPayload {
   user: {
+    photo: string;
     id: number;
     email: string;
   };
@@ -52,14 +53,22 @@ export class UserController {
     let isCookie = false;
 
     for (const cookie of cookies) {
-      const [name] = cookie.trim().split('=');
+      const [name, value] = cookie.trim().split('=');
+      let accessToken = null;
       if (name === 'accessToken') {
         isCookie = true;
-        break;
+        accessToken = value;
+        const decodedToken: UserPayload = verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_PRIVATE_KEY,
+        ) as UserPayload;
+        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+          const email = decodedToken.user.email;
+          const photo = decodedToken.user.photo || '/photo.png';
+          return res.json({ isCookie, email, photo });
+        }
       }
     }
-
-    res.json({ isCookie });
   }
 
   @Get('emailphoto')
