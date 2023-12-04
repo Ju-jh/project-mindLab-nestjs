@@ -45,19 +45,18 @@ export class UserController {
   }
 
   @Post('cookie')
-  async getCookie(@Headers('Cookie') cookie: string, @Res() res): Promise<any> {
+  async getCookie(@Headers('cookie') cookie: string, @Res() res): Promise<any> {
     const cookies = cookie ? cookie.split(';') : [];
-    console.log(cookies, '여기가 cookies');
     let isCookie = false;
 
     for (const cookie of cookies) {
       const [name] = cookie.trim().split('=');
       if (name === 'accessToken') {
         isCookie = true;
-        console.log(name, 'name');
         break;
       }
     }
+
     res.json({ isCookie });
   }
 
