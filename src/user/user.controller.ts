@@ -64,7 +64,7 @@ export class UserController {
     @Headers('cookie') cookie: string,
     @Res() res,
   ): Promise<any> {
-    res.this.userService.getEmailAndPhotoByCookie(cookie);
+    res(this.userService.getEmailAndPhotoByCookie(cookie));
   }
 
   @Get('logout')
