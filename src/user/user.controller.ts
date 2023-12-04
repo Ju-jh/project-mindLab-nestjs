@@ -48,45 +48,23 @@ export class UserController {
   @Post('cookie')
   async getCookie(@Headers('cookie') cookie: string, @Res() res): Promise<any> {
     const cookies = cookie ? cookie.split(';') : [];
-    let isCookie = false;
-
+    let accessToken = null;
     for (const cookie of cookies) {
-      const [name] = cookie.trim().split('=');
+      const [name, value] = cookie.trim().split('=');
+
       if (name === 'accessToken') {
-        isCookie = true;
-        break;
+        accessToken = value;
+        const decodedToken: UserPayload = verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_PRIVATE_KEY,
+        ) as UserPayload;
+        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+          const email = decodedToken.user.email;
+          const user = await this.userService.getUser(email);
+          res.json({ user });
+        }
       }
     }
-
-    res.json({ isCookie });
-  }
-
-  @Get('emailphoto')
-  async getEmailAndPhotoByCookie(
-    @Headers('cookie') cookie: string,
-    @Res() res,
-  ): Promise<any> {
-    console.log(cookie, '여기가 cookie');
-    // const cookies = cookie.split(';');
-
-    // let accessToken = null;
-
-    // for (const cookie of cookies) {
-    //   const [name, value] = cookie.trim().split('=');
-
-    //   if (name === 'accessToken') {
-    //     accessToken = value;
-    //     const decodedToken: UserPayload = verify(
-    //       accessToken,
-    //       process.env.ACCESS_TOKEN_PRIVATE_KEY,
-    //     ) as UserPayload;
-    //     if (decodedToken && decodedToken.user && decodedToken.user.email) {
-    //       const email = await decodedToken.user.email;
-    //       const user = await this.userService.getUser(email);
-    //       res.json(user);
-    //     }
-    //   }
-    // }
   }
 
   @Get('logout')
