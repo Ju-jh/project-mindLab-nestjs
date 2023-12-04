@@ -59,7 +59,7 @@ export class UserService {
     }
 
     try {
-      const cookies = cookie.split(';');
+      const cookies = cookie ? cookie.split(';') : [];
       let accessToken = null;
       for (const cookie of cookies) {
         const [name, value] = cookie.trim().split('=');
