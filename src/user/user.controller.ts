@@ -66,18 +66,35 @@ export class UserController {
   ): Promise<any> {
     const cookies = cookie ? cookie.split(';') : [];
     let accessToken = null;
+
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
+
       if (name === 'accessToken') {
         accessToken = value;
-        const decodedToken: UserPayload = verify(
-          accessToken,
-          process.env.ACCESS_TOKEN_PRIVATE_KEY,
-        ) as UserPayload;
-        if (decodedToken && decodedToken.user && decodedToken.user.email) {
-          const email = await decodedToken.user.email;
-          const user = await this.userService.getUser(email);
-          res.JSON.stringify(user);
+
+        try {
+          const decodedToken: UserPayload = verify(
+            accessToken,
+            process.env.ACCESS_TOKEN_PRIVATE_KEY,
+          ) as UserPayload;
+
+          if (decodedToken && decodedToken.user && decodedToken.user.email) {
+            const email = decodedToken.user.email;
+            const user = await this.userService.getUser(email);
+
+            if (user) {
+              res.status(200).json({
+                email: user.email,
+                photo: user.photo,
+              });
+            } else {
+              res.status(404).json({ error: 'User not found' });
+            }
+          }
+        } catch (error) {
+          console.error('Error in getEmailAndPhotoByCookie:', error);
+          res.status(500).json({ error: 'Internal Server Error' });
         }
       }
     }
