@@ -32,12 +32,12 @@ export class UserController {
   async googleLoginCallback(@Req() req, @Res() res) {
     try {
       const accessToken = this.generateAccessToken(req.user);
-      res.redirect(process.env.FRONTEND_BASEURL);
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
         domain: 'mind-lab-fe-55b3987890a9.herokuapp.com',
       });
+      res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
       console.error('Error in googleLoginCallback:', error);
       res.status(500).send('Internal Server Error');
