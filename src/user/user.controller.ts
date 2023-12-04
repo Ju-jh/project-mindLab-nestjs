@@ -24,7 +24,6 @@ export class UserController {
     const secretKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
     const expiresIn = '24h';
     const accessToken = sign({ user }, secretKey, { expiresIn });
-    console.log(accessToken, '여기가 accessToken');
     return accessToken;
   }
 

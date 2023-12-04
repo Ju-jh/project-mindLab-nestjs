@@ -30,7 +30,6 @@ export class UserService {
       const user = this.userRepository.create(data as Partial<User>);
       return await this.userRepository.save(user);
     } else {
-      console.log(isUser, '여기가 olduser');
       return isUser;
     }
   }
