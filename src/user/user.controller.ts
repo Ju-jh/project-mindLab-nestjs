@@ -59,12 +59,13 @@ export class UserController {
     res.json({ isCookie });
   }
 
-  @Post('getEmailAndPhoto')
+  @Get('getEmailAndPhoto')
   async getEmailAndPhotoByCookie(
     @Headers('cookie') cookie: string,
     @Res() res,
   ): Promise<any> {
-    const cookies = cookie ? cookie.split(';') : [];
+    const cookies = cookie.split(';');
+
     let accessToken = null;
 
     for (const cookie of cookies) {
@@ -72,31 +73,14 @@ export class UserController {
 
       if (name === 'accessToken') {
         accessToken = value;
-
-        try {
-          const decodedToken: UserPayload = verify(
-            accessToken,
-            process.env.ACCESS_TOKEN_PRIVATE_KEY,
-          ) as UserPayload;
-
-          if (decodedToken && decodedToken.user && decodedToken.user.email) {
-            const email = decodedToken.user.email;
-            const user = await this.userService.getUser(email);
-
-            console.log(user, 'controller의 user console.log');
-
-            if (user) {
-              res.status(200).json({
-                email: user.email,
-                photo: user.photo,
-              });
-            } else {
-              res.status(404).json({ error: 'User not found' });
-            }
-          }
-        } catch (error) {
-          console.error('Error in getEmailAndPhotoByCookie:', error);
-          res.status(500).json({ error: 'Internal Server Error' });
+        const decodedToken: UserPayload = verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_PRIVATE_KEY,
+        ) as UserPayload;
+        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+          const email = await decodedToken.user.email;
+          const user = await this.userService.getUser(email);
+          res.json(user);
         }
       }
     }
