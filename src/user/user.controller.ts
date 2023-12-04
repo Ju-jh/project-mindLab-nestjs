@@ -59,6 +59,14 @@ export class UserController {
     res.json({ isCookie });
   }
 
+  @Get('getEmailAndPhoto')
+  async getEmailAndPhotoByCookie(
+    @Headers('cookie') cookie: string,
+    @Res() res,
+  ): Promise<any> {
+    res.this.userService.getEmailAndPhotoByCookie(cookie);
+  }
+
   @Get('logout')
   async logout(@Res() res) {
     res.clearCookie('accessToken', { path: '/' });
