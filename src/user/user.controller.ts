@@ -61,7 +61,7 @@ export class UserController {
     res.json({ isCookie });
   }
 
-  @Post('getemailandphoto')
+  @Get('emailphoto')
   async getEmailAndPhotoByCookie(
     @Headers('cookie') cookie: string,
     @Res() res,
