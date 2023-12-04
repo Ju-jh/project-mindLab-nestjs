@@ -2,6 +2,7 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { UserInput } from './user.input';
 import { UserService } from './user.service';
+import { AuthCookie } from './user.AuthCookie';
 
 @Resolver()
 export class UserResolver {
@@ -15,5 +16,11 @@ export class UserResolver {
   @Mutation(() => User, { name: 'createUser' })
   async createUser(@Args('input') input: UserInput): Promise<User> {
     return this.userService.findByEmailOrSave(input);
+  }
+
+  @Mutation(() => User, { name: 'getUserEmailPhotoByCookie' })
+  async getEmailPhotoByCookie(@AuthCookie() cookie: string): Promise<User> {
+    console.log(cookie, '여기가 cookie');
+    return this.userService.getEmailAndPhotoByCookie(cookie);
   }
 }

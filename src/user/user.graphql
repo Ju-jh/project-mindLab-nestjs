@@ -21,4 +21,5 @@ type Query {
 
 type Mutation {
   createUser(id: ID!, email: String!, photo: String!): User
+  getEmailPhotoByCookie(email: String!, photo: String!): User
 }

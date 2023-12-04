@@ -3,7 +3,7 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserInput } from './user.input';
-
+import { verify } from 'jsonwebtoken';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -43,6 +43,28 @@ export class UserService {
       }
 
       return user;
+    } catch (error) {
+      console.error('Error in getUser:', error);
+      return null;
+    }
+  }
+
+  async getEmailAndPhoto(cookie: string): Promise<User> {
+    try {
+      const cookies = cookie.split(';');
+      let accessToken = null;
+      for (const cookie of cookies) {
+        const [name, value] = cookie.trim().split('=');
+
+        if (name === 'accessToken') {
+          accessToken = value;
+          const decodedToken = verify(
+            accessToken,
+            process.env.ACCESS_TOKEN_PRIVATE_KEY,
+          );
+          return decodedToken;
+        }
+      }
     } catch (error) {
       console.error('Error in getUser:', error);
       return null;
