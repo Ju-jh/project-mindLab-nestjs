@@ -49,7 +49,7 @@ export class UserService {
     }
   }
 
-  async getEmailAndPhoto(cookie: string): Promise<User> {
+  async getEmailAndPhotoByCookie(cookie: string): Promise<User> {
     try {
       const cookies = cookie.split(';');
       let accessToken = null;
