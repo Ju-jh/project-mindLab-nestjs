@@ -1,8 +1,9 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { User } from './user.entity';
 import { UserInput } from './user.input';
 import { UserService } from './user.service';
 import { AuthCookie } from './user.AuthCookie';
+import { getEmailAndPhotoDTO } from './dto/getEmailAndPhoto.dto';
 
 @Resolver()
 export class UserResolver {
@@ -18,8 +19,11 @@ export class UserResolver {
     return this.userService.findByEmailOrSave(input);
   }
 
-  @Mutation(() => User, { name: 'getUserEmailPhotoByCookie' })
-  async getEmailPhotoByCookie(@AuthCookie() cookie: string): Promise<User> {
+  @Mutation((returns) => getEmailAndPhotoDTO)
+  async getEmailPhotoByCookie(
+    @AuthCookie() cookie: string,
+    @Context('req') req: Request,
+  ): Promise<getEmailAndPhotoDTO | null> {
     console.log(cookie, '여기가 cookie');
     return this.userService.getEmailAndPhotoByCookie(cookie);
   }

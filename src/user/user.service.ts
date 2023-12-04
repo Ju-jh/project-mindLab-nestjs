@@ -3,7 +3,8 @@ import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserInput } from './user.input';
-import { verify } from 'jsonwebtoken';
+import { verify, JwtPayload } from 'jsonwebtoken';
+import { getEmailAndPhotoDTO } from './dto/getEmailAndPhoto.dto';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
@@ -49,7 +50,14 @@ export class UserService {
     }
   }
 
-  async getEmailAndPhotoByCookie(cookie: string): Promise<User> {
+  async getEmailAndPhotoByCookie(cookie: string): Promise<getEmailAndPhotoDTO> {
+    interface UserPayload extends JwtPayload {
+      user: {
+        email: string;
+        photo: string;
+      };
+    }
+
     try {
       const cookies = cookie.split(';');
       let accessToken = null;
@@ -58,11 +66,14 @@ export class UserService {
 
         if (name === 'accessToken') {
           accessToken = value;
-          const decodedToken = verify(
+          const decodedToken: UserPayload = verify(
             accessToken,
             process.env.ACCESS_TOKEN_PRIVATE_KEY,
-          );
-          return decodedToken;
+          ) as UserPayload;
+          if (decodedToken && decodedToken.user && decodedToken.user.email) {
+            const { email, photo } = decodedToken.user;
+            return { email, photo };
+          }
         }
       }
     } catch (error) {
