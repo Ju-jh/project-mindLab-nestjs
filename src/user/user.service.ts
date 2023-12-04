@@ -50,7 +50,7 @@ export class UserService {
     }
   }
 
-  async getEmailAndPhotoByCookie(cookie: string): Promise<getEmailAndPhotoDTO> {
+  async getEmailAndPhotoByCookie(cookie: string): Promise<any> {
     interface UserPayload extends JwtPayload {
       user: {
         email: string;
@@ -71,8 +71,9 @@ export class UserService {
             process.env.ACCESS_TOKEN_PRIVATE_KEY,
           ) as UserPayload;
           if (decodedToken && decodedToken.user && decodedToken.user.email) {
-            const { email, photo } = decodedToken.user;
-            return { email, photo };
+            const email = await decodedToken.user.email;
+            const user = await this.getUser(email);
+            return JSON.stringify(user);
           }
         }
       }
