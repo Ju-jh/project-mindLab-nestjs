@@ -35,7 +35,6 @@ export class UserController {
       res.cookie('accessToken', accessToken, {
         httpOnly: true,
         path: '/',
-        domain: 'mind-lab-fe-55b3987890a9.herokuapp.com',
       });
       res.redirect(process.env.FRONTEND_BASEURL);
     } catch (error) {
