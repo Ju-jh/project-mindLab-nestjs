@@ -87,6 +87,7 @@ export class UserController {
     @Headers('cookie') cookie: string,
     @Res() res,
   ): Promise<any> {
+    console.log(cookie, 'cookie입니다.');
     const cookies = cookie.split(';');
 
     let accessToken = null;
