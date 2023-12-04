@@ -88,26 +88,26 @@ export class UserController {
     @Res() res,
   ): Promise<any> {
     console.log(cookie, 'cookie입니다.');
-    const cookies = cookie.split(';');
+    // const cookies = cookie.split(';');
 
-    let accessToken = null;
+    // let accessToken = null;
 
-    for (const cookie of cookies) {
-      const [name, value] = cookie.trim().split('=');
+    // for (const cookie of cookies) {
+    //   const [name, value] = cookie.trim().split('=');
 
-      if (name === 'accessToken') {
-        accessToken = value;
-        const decodedToken: UserPayload = verify(
-          accessToken,
-          process.env.ACCESS_TOKEN_PRIVATE_KEY,
-        ) as UserPayload;
-        if (decodedToken && decodedToken.user && decodedToken.user.email) {
-          const email = await decodedToken.user.email;
-          const user = await this.userService.getUser(email);
-          res.json(user);
-        }
-      }
-    }
+    //   if (name === 'accessToken') {
+    //     accessToken = value;
+    //     const decodedToken: UserPayload = verify(
+    //       accessToken,
+    //       process.env.ACCESS_TOKEN_PRIVATE_KEY,
+    //     ) as UserPayload;
+    //     if (decodedToken && decodedToken.user && decodedToken.user.email) {
+    //       const email = await decodedToken.user.email;
+    //       const user = await this.userService.getUser(email);
+    //       res.json(user);
+    //     }
+    //   }
+    // }
   }
 
   @Get('logout')
