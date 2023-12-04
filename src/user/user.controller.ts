@@ -54,13 +54,14 @@ export class UserController {
 
       if (name === 'accessToken') {
         accessToken = value;
-        const decodedToken: UserPayload = verify(
+        const decodedToken = verify(
           accessToken,
           process.env.ACCESS_TOKEN_PRIVATE_KEY,
-        ) as UserPayload;
-        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+        );
+        if (decodedToken) {
           const email = decodedToken.user.email;
           const user = await this.userService.getUser(email);
+          console.log(user, '여기가 프론트 user/cookie console.log(`user`)');
           res.json({ user });
         }
       }
