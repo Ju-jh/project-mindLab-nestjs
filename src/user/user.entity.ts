@@ -8,7 +8,7 @@ import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 export class User {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  u_id: string;
 
   @Field()
   @Column()

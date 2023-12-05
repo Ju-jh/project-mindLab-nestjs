@@ -15,7 +15,7 @@ import {
 export class Answer {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => ID)
-  id: string;
+  a_id: string;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.answers)

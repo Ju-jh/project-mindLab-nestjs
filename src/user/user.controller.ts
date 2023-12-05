@@ -71,34 +71,6 @@ export class UserController {
     }
   }
 
-  @Get('emailphoto')
-  async getEmailAndPhotoByCookie(
-    @Headers('cookie') cookie: string,
-    @Res() res,
-  ): Promise<any> {
-    console.log(cookie, '여기가 cookie');
-    // const cookies = cookie.split(';');
-
-    // let accessToken = null;
-
-    // for (const cookie of cookies) {
-    //   const [name, value] = cookie.trim().split('=');
-
-    //   if (name === 'accessToken') {
-    //     accessToken = value;
-    //     const decodedToken: UserPayload = verify(
-    //       accessToken,
-    //       process.env.ACCESS_TOKEN_PRIVATE_KEY,
-    //     ) as UserPayload;
-    //     if (decodedToken && decodedToken.user && decodedToken.user.email) {
-    //       const email = await decodedToken.user.email;
-    //       const user = await this.userService.getUser(email);
-    //       res.json(user);
-    //     }
-    //   }
-    // }
-  }
-
   @Get('logout')
   async logout(@Res() res) {
     res.clearCookie('accessToken', { path: '/' });

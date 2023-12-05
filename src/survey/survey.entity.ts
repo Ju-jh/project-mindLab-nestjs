@@ -15,11 +15,15 @@ import {
 export class Survey {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  s_id: string;
 
   @Field()
   @Column()
   title: string;
+
+  @Field()
+  @Column()
+  description: string;
 
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.surveys)

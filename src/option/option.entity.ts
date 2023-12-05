@@ -14,7 +14,7 @@ import {
 export class Option {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  o_id: string;
 
   @Field()
   @Column()
