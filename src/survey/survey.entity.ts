@@ -19,7 +19,7 @@ export class Survey {
 
   @Field()
   @Column()
-  @Column({ default: '' })
+  @Column({ default: '무제' })
   title: string;
 
   @Field()

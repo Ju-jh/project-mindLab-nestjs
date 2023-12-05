@@ -37,10 +37,19 @@ export class SurveyService {
       const mySurveys = await this.surveyRepository.find({
         where: { user: { u_id: userId } },
       });
-
       return mySurveys;
     } catch (error) {
       console.error('Error while getting user surveys:', error);
+      throw error;
+    }
+  }
+
+  async getAllSurvey(): Promise<Survey[]> {
+    try {
+      const AllSurveys = await this.surveyRepository.find();
+      return AllSurveys;
+    } catch (error) {
+      console.error('Error while getting all surveys:', error);
       throw error;
     }
   }

@@ -6,7 +6,6 @@ import { UserService } from 'src/user/user.service';
 
 interface UserPayload extends JwtPayload {
   user: {
-    id: string;
     email: string;
   };
 }
@@ -32,6 +31,12 @@ export class SurveyResolver {
     const userEmail = await this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const mySurveys = await this.surveyService.getMySurvey(userId);
+    return mySurveys;
+  }
+
+  @Query(() => [Survey])
+  async getAllSurvey(): Promise<Survey[]> {
+    const mySurveys = await this.surveyService.getAllSurvey();
     return mySurveys;
   }
 
