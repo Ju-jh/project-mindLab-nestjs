@@ -20,7 +20,11 @@ export class SurveyResolver {
   @Mutation(() => Survey)
   async createSurvey(@Context('req') req): Promise<Survey> {
     const userEmail = this.extractEmailFromCookie(req);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
+    console.log(req, '여기가 req');
+    console.log(userEmail, '여기가 userEmail');
+    const userId = await this.userService.findUserIdByEmail(
+      'jjdong9108@gmail.com',
+    );
     const createdSurvey = await this.surveyService.createSurvey(userId);
     return createdSurvey;
   }
