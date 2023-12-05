@@ -47,9 +47,9 @@ export class SurveyResolver {
           process.env.ACCESS_TOKEN_PRIVATE_KEY,
         ) as UserPayload;
         if (decodedToken && decodedToken.user && decodedToken.user.email) {
-          const userId = decodedToken.user.id;
-          console.log(userId, '여기가 userId');
-          return userId;
+          const userEmail = decodedToken.user.email;
+          console.log(userEmail, '여기가 userEmail');
+          return userEmail;
         }
       }
     }
