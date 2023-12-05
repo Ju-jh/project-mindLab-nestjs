@@ -32,12 +32,10 @@ export class SurveyService {
     }
   }
 
-  async getMySurvey(): Promise<Survey[]> {
+  async getMySurvey(userId: string): Promise<Survey[]> {
     try {
-      const currentUserId = '7aecc6ce-c746-4609-b48c-5b9df148cabe';
-
       const mySurveys = await this.surveyRepository.find({
-        where: { user: { u_id: currentUserId } },
+        where: { user: { u_id: userId } },
       });
 
       return mySurveys;
