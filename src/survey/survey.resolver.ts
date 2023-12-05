@@ -6,6 +6,7 @@ import { UserService } from 'src/user/user.service';
 
 interface UserPayload extends JwtPayload {
   user: {
+    id: string;
     email: string;
   };
 }
@@ -44,6 +45,9 @@ export class SurveyResolver {
         ) as UserPayload;
         if (decodedToken && decodedToken.user && decodedToken.user.email) {
           const email = decodedToken.user.email;
+          console.log(email, '여기가 email');
+          const userId = decodedToken.user.id;
+          console.log(userId, '여기가 userId');
           return email;
         }
       }
