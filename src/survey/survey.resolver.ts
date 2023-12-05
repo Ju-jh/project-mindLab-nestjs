@@ -19,8 +19,9 @@ export class SurveyResolver {
 
   @Mutation(() => Survey)
   async createSurvey(@Context('req') req): Promise<Survey> {
-    const userEmail = this.extractEmailFromCookie(req);
-    console.log(req, '여기가 req');
+    const cookieHeader = req.headers.cookie;
+    console.log(cookieHeader, '여기가 쿠키헤더');
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
     console.log(userEmail, '여기가 userEmail');
     const userId = await this.userService.findUserIdByEmail(
       'jjdong9108@gmail.com',
@@ -35,9 +36,8 @@ export class SurveyResolver {
     return mySurveys;
   }
 
-  private extractEmailFromCookie(req): string | null {
-    const cookie = req.cookies;
-    const cookies = cookie ? cookie.split(';') : [];
+  private extractEmailFromCookie(cookieHeader: string): string | null {
+    const cookies = cookieHeader ? cookieHeader.split(';') : [];
     for (const cookie of cookies) {
       const [name, value] = cookie.trim().split('=');
       let accessToken = null;
