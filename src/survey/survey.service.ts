@@ -2,7 +2,6 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Survey } from './survey.entity';
 import { Repository } from 'typeorm';
-import { SurveyInput } from './survey.input';
 
 @Injectable()
 export class SurveyService {
@@ -24,9 +23,9 @@ export class SurveyService {
     );
   }
 
-  async createSurvey(data: SurveyInput): Promise<Survey> {
+  async createSurvey(): Promise<Survey> {
     try {
-      const survey = this.surveyRepository.create(data);
+      const survey = this.surveyRepository.create();
       return await this.surveyRepository.save(survey);
     } catch (error) {
       this.handleQueryError('createSurvey', 0, error);

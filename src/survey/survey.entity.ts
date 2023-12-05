@@ -19,10 +19,12 @@ export class Survey {
 
   @Field()
   @Column()
+  @Column({ nullable: true })
   title: string;
 
   @Field()
   @Column()
+  @Column({ nullable: true })
   description: string;
 
   @Field(() => User)
