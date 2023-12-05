@@ -60,7 +60,7 @@ export class SurveyService {
   ): Promise<{ success: boolean }> {
     try {
       const survey = await this.surveyRepository.findOne({
-        where: { s_id: surveyId, user: { u_id: userId } },
+        where: { s_id: surveyId },
       });
 
       if (survey) {
