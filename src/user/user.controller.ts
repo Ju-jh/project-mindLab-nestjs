@@ -9,18 +9,15 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { JwtPayload, verify, sign } from 'jsonwebtoken';
-import { UserService } from './user.service';
 interface UserPayload extends JwtPayload {
   user: {
-    photo: string;
-    id: number;
     email: string;
+    photo: string;
   };
 }
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
   private generateAccessToken(user: any): string {
     const secretKey = process.env.ACCESS_TOKEN_PRIVATE_KEY;
     const expiresIn = '24h';

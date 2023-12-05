@@ -19,7 +19,8 @@ export class SurveyResolver {
 
   @Mutation(() => Survey)
   async createSurvey(@Context('req') req): Promise<Survey> {
-    const userId = this.extractEmailFromCookie(req);
+    const userEmail = this.extractEmailFromCookie(req);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
     const createdSurvey = await this.surveyService.createSurvey(userId);
     return createdSurvey;
   }
