@@ -1,4 +1,4 @@
-import { Resolver, Mutation, Query, Context } from '@nestjs/graphql';
+import { Resolver, Mutation, Query, Context, Args } from '@nestjs/graphql';
 import { Survey } from './survey.entity';
 import { SurveyService } from './survey.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
@@ -38,6 +38,21 @@ export class SurveyResolver {
   async getAllSurvey(): Promise<Survey[]> {
     const mySurveys = await this.surveyService.getAllSurvey();
     return mySurveys;
+  }
+
+  @Mutation(() => Survey)
+  async deleteSurvey(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Survey[]> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = await this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const deleteSurvey = await this.surveyService.deleteSurvey(
+      surveyId,
+      userId,
+    );
+    return deleteSurvey;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
