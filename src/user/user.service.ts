@@ -4,7 +4,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserInput } from './user.input';
 import { verify, JwtPayload } from 'jsonwebtoken';
-import { getEmailAndPhotoDTO } from './dto/getEmailAndPhoto.dto';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);
