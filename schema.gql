@@ -25,7 +25,13 @@ type Survey {
   user: User!
   questions: Question!
   answers: Answer!
+  createdAt: DateTime!
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Answer {
   a_id: ID!
@@ -35,11 +41,6 @@ type Answer {
   option: Option!
   createdAt: DateTime!
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type Question {
   q_id: ID!
@@ -51,12 +52,14 @@ type Question {
 
 type Query {
   getMySurvey: [Survey!]!
+  getAllSurvey: [Survey!]!
   getUser(email: String!): User!
   isPizzaGood: Boolean!
 }
 
 type Mutation {
   createSurvey: Survey!
+  deleteSurvey(surveyId: String!): Survey!
   createUser(input: UserInput!): User!
 }
 

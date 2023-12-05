@@ -48,6 +48,7 @@ export class SurveyResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
+    console.log(surveyId, 'surveyId입니다');
     const deleteSurvey = await this.surveyService.deleteSurvey(
       surveyId,
       userId,
