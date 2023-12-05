@@ -19,8 +19,7 @@ export class SurveyResolver {
 
   @Mutation(() => Survey)
   async createSurvey(@Context('req') req): Promise<Survey> {
-    const userEmail = this.extractEmailFromCookie(req);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const userId = this.extractEmailFromCookie(req);
     const createdSurvey = await this.surveyService.createSurvey(userId);
     return createdSurvey;
   }
@@ -44,11 +43,9 @@ export class SurveyResolver {
           process.env.ACCESS_TOKEN_PRIVATE_KEY,
         ) as UserPayload;
         if (decodedToken && decodedToken.user && decodedToken.user.email) {
-          const email = decodedToken.user.email;
-          console.log(email, '여기가 email');
           const userId = decodedToken.user.id;
           console.log(userId, '여기가 userId');
-          return email;
+          return userId;
         }
       }
     }
