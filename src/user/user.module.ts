@@ -14,5 +14,6 @@ import { GoogleStrategy } from './google.stratgy';
   ],
   providers: [GoogleStrategy, UserService, UserResolver],
   controllers: [UserController],
+  exports: [UserService, TypeOrmModule],
 })
 export class UserModule {}

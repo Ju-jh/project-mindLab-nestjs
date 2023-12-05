@@ -22,7 +22,7 @@ type Survey {
   s_id: ID!
   title: String!
   description: String!
-  userId: User!
+  user: User!
   questions: Question!
   answers: Answer!
 }
@@ -51,8 +51,8 @@ type Question {
 
 type Query {
   getMySurvey: [Survey!]!
-  isPizzaGood: Boolean!
   getUser(email: String!): User!
+  isPizzaGood: Boolean!
 }
 
 type Mutation {

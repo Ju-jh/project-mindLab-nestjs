@@ -1,16 +1,26 @@
-import { Resolver, Mutation, Query } from '@nestjs/graphql';
+import { Resolver, Mutation, Query, Context } from '@nestjs/graphql';
 import { Survey } from './survey.entity';
 import { SurveyService } from './survey.service';
+import { JwtPayload, verify } from 'jsonwebtoken';
+import { UserService } from 'src/user/user.service';
 
+interface UserPayload extends JwtPayload {
+  user: {
+    email: string;
+  };
+}
 @Resolver()
 export class SurveyResolver {
-  constructor(private readonly surveyService: SurveyService) {}
+  constructor(
+    private readonly surveyService: SurveyService,
+    private readonly userService: UserService,
+  ) {}
 
   @Mutation(() => Survey)
-  async createSurvey(): Promise<Survey> {
-    const createdSurvey = await this.surveyService.createSurvey(
-      '7aecc6ce-c746-4609-b48c-5b9df148cabe',
-    );
+  async createSurvey(@Context('req') req): Promise<Survey> {
+    const userEmail = this.extractEmailFromCookie(req);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const createdSurvey = await this.surveyService.createSurvey(userId);
     return createdSurvey;
   }
 
@@ -18,5 +28,25 @@ export class SurveyResolver {
   async getMySurvey(): Promise<Survey[]> {
     const mySurveys = await this.surveyService.getMySurvey();
     return mySurveys;
+  }
+
+  private extractEmailFromCookie(req): string | null {
+    const cookie = req.cookies;
+    const cookies = cookie ? cookie.split(';') : [];
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      let accessToken = null;
+      if (name === 'accessToken') {
+        accessToken = value;
+        const decodedToken: UserPayload = verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_PRIVATE_KEY,
+        ) as UserPayload;
+        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+          const email = decodedToken.user.email;
+          return email;
+        }
+      }
+    }
   }
 }

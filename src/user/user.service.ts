@@ -50,6 +50,21 @@ export class UserService {
     }
   }
 
+  async findUserIdByEmail(email: string): Promise<string | null> {
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+
+      if (!user) {
+        return null;
+      }
+
+      return user.u_id;
+    } catch (error) {
+      this.handleQueryError('findUserIdByEmail', 0, error);
+      return null;
+    }
+  }
+
   async getEmailAndPhotoByCookie(cookie: string): Promise<any> {
     interface UserPayload extends JwtPayload {
       user: {
