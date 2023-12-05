@@ -54,7 +54,10 @@ export class SurveyService {
     }
   }
 
-  async deleteSurvey(surveyId: string, userId: string): Promise<Survey[]> {
+  async deleteSurvey(
+    surveyId: string,
+    userId: string,
+  ): Promise<{ success: boolean }> {
     try {
       const survey = await this.surveyRepository.findOne({
         where: { s_id: surveyId, user: { u_id: userId } },
@@ -62,19 +65,13 @@ export class SurveyService {
 
       if (survey) {
         await this.surveyRepository.remove(survey);
-
-        const updatedSurveys = await this.surveyRepository.find({
-          where: { user: { u_id: userId } },
-        });
-
-        return updatedSurveys;
+        return { success: true };
       } else {
         throw new Error(
           '설문지를 찾을 수 없거나 삭제할 수 있는 권한이 없습니다.',
         );
       }
     } catch (error) {
-      // 에러 처리
       console.error('설문지 삭제 중 오류 발생:', error);
       throw error;
     }

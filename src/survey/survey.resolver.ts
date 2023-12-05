@@ -19,7 +19,7 @@ export class SurveyResolver {
   @Mutation(() => Survey)
   async createSurvey(@Context('req') req): Promise<Survey> {
     const cookieHeader = await req.headers.cookie;
-    const userEmail = await this.extractEmailFromCookie(cookieHeader);
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const createdSurvey = await this.surveyService.createSurvey(userId);
     return createdSurvey;
@@ -28,7 +28,7 @@ export class SurveyResolver {
   @Query(() => [Survey])
   async getMySurvey(@Context('req') req): Promise<Survey[]> {
     const cookieHeader = await req.headers.cookie;
-    const userEmail = await this.extractEmailFromCookie(cookieHeader);
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const mySurveys = await this.surveyService.getMySurvey(userId);
     return mySurveys;
@@ -44,9 +44,9 @@ export class SurveyResolver {
   async deleteSurvey(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<Survey[]> {
+  ): Promise<any> {
     const cookieHeader = await req.headers.cookie;
-    const userEmail = await this.extractEmailFromCookie(cookieHeader);
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const deleteSurvey = await this.surveyService.deleteSurvey(
       surveyId,
