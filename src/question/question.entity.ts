@@ -15,7 +15,7 @@ import {
 export class Question {
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
-  id: string;
+  q_id: string;
 
   @Field()
   @Column()

@@ -23,12 +23,27 @@ export class SurveyService {
     );
   }
 
-  async createSurvey(): Promise<Survey> {
+  async createSurvey(userId: string): Promise<Survey> {
     try {
-      const survey = this.surveyRepository.create();
+      const survey = this.surveyRepository.create({ user: { u_id: userId } });
       return await this.surveyRepository.save(survey);
     } catch (error) {
       this.handleQueryError('createSurvey', 0, error);
+    }
+  }
+
+  async getMySurvey(): Promise<Survey[]> {
+    try {
+      const currentUserId = '7aecc6ce-c746-4609-b48c-5b9df148cabe';
+
+      const mySurveys = await this.surveyRepository.find({
+        where: { user: { u_id: currentUserId } },
+      });
+
+      return mySurveys;
+    } catch (error) {
+      console.error('Error while getting user surveys:', error);
+      throw error;
     }
   }
 }
