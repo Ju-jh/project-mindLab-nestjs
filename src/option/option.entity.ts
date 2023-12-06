@@ -18,11 +18,11 @@ export class Option {
   o_id: string;
 
   @Field()
-  @Column()
+  @Column({ default: '항목을 입력하세요' })
   text: string;
 
   @Field()
-  @Column()
+  @Column({ default: 1 })
   score: number;
 
   @Field(() => Survey)
