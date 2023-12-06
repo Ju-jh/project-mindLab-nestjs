@@ -81,7 +81,7 @@ export class SurveyResolver {
     return finSurveyUpdateTitle;
   }
   @Mutation(() => Survey)
-  async updatMySurveyDescription(
+  async updateMySurveyDescription(
     @Args('surveyId') surveyId: string,
     @Args('newTitle') newDescription: string,
     @Context('req') req,
