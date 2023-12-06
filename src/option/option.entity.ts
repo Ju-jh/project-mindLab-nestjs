@@ -13,9 +13,6 @@ import {
 @Entity()
 @ObjectType()
 export class Option {
-  save() {
-    throw new Error('Method not implemented.');
-  }
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   o_id: string;
