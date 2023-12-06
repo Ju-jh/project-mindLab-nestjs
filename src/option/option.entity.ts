@@ -18,7 +18,7 @@ export class Option {
   o_id: string;
 
   @Field()
-  @Column({ default: '항목을 입력하세요' })
+  @Column({ default: '문항 제목을 입력하세요' })
   text: string;
 
   @Field()
