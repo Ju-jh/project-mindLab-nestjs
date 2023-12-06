@@ -46,7 +46,6 @@ type Question {
   q_id: ID!
   text: String!
   survey: Survey!
-  questions: [Question!]!
   answers: Answer!
 }
 
@@ -55,6 +54,7 @@ type Query {
   getAllSurvey: [Survey!]!
   getMyWhichSurvey: [Survey!]!
   getUser(email: String!): User!
+  getAllQuestions(surveyId: String!): [Question!]!
   isPizzaGood: Boolean!
 }
 

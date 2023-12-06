@@ -48,15 +48,11 @@ export class QuestionService {
 
   async getAllQuestions(userId: string, surveyId: string): Promise<Question[]> {
     try {
-      return await this.questionRepository
-        .createQueryBuilder('question')
-        .innerJoinAndSelect('question.survey', 'survey')
-        .innerJoinAndSelect('survey.user', 'user')
-        .where('user.u_id = :userId', { userId })
-        .andWhere('survey.s_id = :surveyId', { surveyId })
-        .getMany();
+      return await this.questionRepository.find({
+        where: { survey: { s_id: surveyId, user: { u_id: userId } } },
+      });
     } catch (error) {
-      this.handleQueryError('getAllQuestions', 0, error);
+      this.handleQueryError(`getAllQuestions`, 0, error);
       throw error;
     }
   }
