@@ -61,11 +61,12 @@ type Query {
 type Mutation {
   createSurvey: Survey!
   deleteSurvey(surveyId: String!): Survey!
-  MySurvey(surveyId: String!, newTitle: String!): Survey!
+  updateMySurveyTitle(surveyId: String!, newTitle: String!): Survey!
   getSurveyData(surveyId: String!): Survey!
   updateMySurveyDescription(surveyId: String!, newDescription: String!): Survey!
   createUser(input: UserInput!): User!
   createQuestion(surveyId: String!): Question!
+  deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
 }
 
 input UserInput {
