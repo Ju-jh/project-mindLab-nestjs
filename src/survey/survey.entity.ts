@@ -28,6 +28,11 @@ export class Survey {
   @Column({ default: '' })
   description: string;
 
+  @Field()
+  @Column()
+  @Column({ default: false })
+  public: boolean;
+
   @Field(() => User)
   @ManyToOne(() => User, (user) => user.surveys)
   user: User;
