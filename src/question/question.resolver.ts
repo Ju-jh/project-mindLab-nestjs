@@ -47,6 +47,25 @@ export class QuestionResolver {
   }
 
   @Mutation(() => [Question])
+  async updateQuestionText(
+    @Args('surveyId') surveyId: string,
+    @Args('questionId') questionId: string,
+    @Args('newText') newText: string,
+    @Context('req') req,
+  ): Promise<Question[]> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const getAllQustion = await this.questionService.updateQuestionText(
+      userId,
+      surveyId,
+      questionId,
+      newText,
+    );
+    return getAllQustion;
+  }
+
+  @Mutation(() => [Question])
   async deleteQuestion(
     @Args('surveyId') surveyId: string,
     @Args('questionId') questionId: string,

@@ -83,4 +83,35 @@ export class QuestionService {
       throw error;
     }
   }
+
+  async updateQuestionText(
+    userId: string,
+    surveyId: string,
+    questionId: string,
+    newText: string,
+  ): Promise<any> {
+    try {
+      const question = await this.questionRepository.findOne({
+        where: {
+          q_id: questionId,
+          survey: { s_id: surveyId, user: { u_id: userId } },
+        },
+      });
+
+      if (!question) {
+        throw new NotFoundException(
+          `Question with id ${questionId} not found for user ${surveyId} or ${userId}`,
+        );
+      }
+
+      question.text = newText; // Update the text property
+
+      const result = await this.questionRepository.save(question);
+
+      return [{ q_id: questionId }];
+    } catch (error) {
+      this.handleQueryError(`updateQuestionText`, 1, error);
+      throw error;
+    }
+  }
 }
