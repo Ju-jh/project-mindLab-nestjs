@@ -1,4 +1,4 @@
-import { Args, Context, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { OptionService } from './option.service';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
@@ -15,6 +15,8 @@ export class OptionResolver {
     private readonly optionService: OptionService,
     private readonly userService: UserService,
   ) {}
+
+  @Mutation(() => Option)
   async createOption(
     @Args('surveyId') surveyId: string,
     @Args('questionId') questionId: string,

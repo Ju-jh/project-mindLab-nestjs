@@ -68,6 +68,7 @@ type Mutation {
   createUser(input: UserInput!): User!
   createQuestion(surveyId: String!): Question!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
+  createOption(surveyId: String!, questionId: String!): Option!
 }
 
 input UserInput {
