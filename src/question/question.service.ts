@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from './question.entity';
@@ -53,6 +53,32 @@ export class QuestionService {
       });
     } catch (error) {
       this.handleQueryError(`getAllQuestions`, 0, error);
+      throw error;
+    }
+  }
+
+  async deleteQuestion(
+    userId: string,
+    surveyId: string,
+    questionId: string,
+  ): Promise<Question[]> {
+    try {
+      const question = await this.questionRepository.findOne({
+        where: {
+          q_id: questionId,
+          survey: { s_id: surveyId, user: { u_id: userId } },
+        },
+      });
+
+      if (!question) {
+        throw new NotFoundException(
+          `Question with id ${questionId} not found for user ${surveyId} or ${userId}`,
+        );
+      }
+
+      return [question];
+    } catch (error) {
+      this.handleQueryError(`deleteQuestion`, 1, error);
       throw error;
     }
   }

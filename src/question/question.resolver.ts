@@ -46,6 +46,23 @@ export class QuestionResolver {
     return getAllQustion;
   }
 
+  @Mutation(() => [Question])
+  async deleteQuestion(
+    @Args('surveyId') surveyId: string,
+    @Args('questionId') questionId: string,
+    @Context('req') req,
+  ): Promise<Question[]> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const getAllQustion = await this.questionService.deleteQuestion(
+      userId,
+      surveyId,
+      questionId,
+    );
+    return getAllQustion;
+  }
+
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];
     for (const cookie of cookies) {
