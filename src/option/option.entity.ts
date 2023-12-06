@@ -8,18 +8,14 @@ import {
   Column,
   ManyToOne,
   OneToMany,
-  AfterInsert,
-  getRepository,
 } from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class Option {
-  async save() {
-    const optionRepository = getRepository(Option);
-    await optionRepository.save(this);
+  save() {
+    throw new Error('Method not implemented.');
   }
-
   @Field(() => ID)
   @PrimaryGeneratedColumn('uuid')
   o_id: string;
@@ -43,14 +39,4 @@ export class Option {
   @Field(() => Answer)
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
-
-  @AfterInsert()
-  async createDefaultOption() {
-    const defaultOption = new Option();
-    defaultOption.text = this.text;
-    defaultOption.score = this.score;
-    defaultOption.survey = this.survey;
-    defaultOption.question = this.question;
-    await defaultOption.save();
-  }
 }
