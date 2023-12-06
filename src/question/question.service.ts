@@ -61,7 +61,7 @@ export class QuestionService {
     userId: string,
     surveyId: string,
     questionId: string,
-  ): Promise<Question[]> {
+  ): Promise<any> {
     try {
       const question = await this.questionRepository.find({
         where: {
@@ -77,7 +77,7 @@ export class QuestionService {
 
       const result = await this.questionRepository.remove(question);
 
-      return result;
+      return [{ q_id: questionId }];
     } catch (error) {
       this.handleQueryError(`deleteQuestion`, 1, error);
       throw error;
