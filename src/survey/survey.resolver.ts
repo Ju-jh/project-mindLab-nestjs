@@ -64,6 +64,23 @@ export class SurveyResolver {
     return mySurveys;
   }
 
+  @Mutation(() => Survey)
+  async updatMySurveyTitle(
+    @Args('surveyId') surveyId: string,
+    @Args('newTitle') newTitle: string,
+    @Context('req') req,
+  ): Promise<Survey> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const finSurveyUpdateTitle = await this.surveyService.updateSurveyTitle(
+      userId,
+      surveyId,
+      newTitle,
+    );
+    return finSurveyUpdateTitle;
+  }
+
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];
     for (const cookie of cookies) {

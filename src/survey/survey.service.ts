@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Survey } from './survey.entity';
 import { Repository } from 'typeorm';
@@ -29,6 +29,29 @@ export class SurveyService {
       return await this.surveyRepository.save(survey);
     } catch (error) {
       this.handleQueryError('createSurvey', 0, error);
+    }
+  }
+
+  async updateSurveyTitle(
+    userId: string,
+    surveyId: string,
+    newTitle: string,
+  ): Promise<Survey> {
+    try {
+      const survey = await this.surveyRepository.findOne({
+        where: { s_id: surveyId, user: { u_id: userId } },
+      });
+
+      if (!survey) {
+        throw new NotFoundException(
+          `Survey with id ${surveyId} not found for user ${userId}`,
+        );
+      }
+      survey.title = newTitle;
+      await this.surveyRepository.save(survey);
+      return survey;
+    } catch (error) {
+      throw error;
     }
   }
 
