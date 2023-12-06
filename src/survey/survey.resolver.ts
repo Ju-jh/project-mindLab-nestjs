@@ -83,7 +83,7 @@ export class SurveyResolver {
   @Mutation(() => Survey)
   async updateMySurveyDescription(
     @Args('surveyId') surveyId: string,
-    @Args('newTitle') newDescription: string,
+    @Args('newDescription') newDescription: string,
     @Context('req') req,
   ): Promise<Survey> {
     const cookieHeader = await req.headers.cookie;
