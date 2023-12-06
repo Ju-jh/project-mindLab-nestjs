@@ -61,6 +61,7 @@ type Query {
 type Mutation {
   createSurvey: Survey!
   deleteSurvey(surveyId: String!): Survey!
+  updatMySurveyTitle(surveyId: String!, newTitle: String!): Survey!
   createUser(input: UserInput!): User!
   createQuestion(surveyId: String!): Question!
 }
