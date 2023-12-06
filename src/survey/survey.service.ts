@@ -55,6 +55,29 @@ export class SurveyService {
     }
   }
 
+  async updateSurveyDescription(
+    userId: string,
+    surveyId: string,
+    newDescription: string,
+  ): Promise<Survey> {
+    try {
+      const survey = await this.surveyRepository.findOne({
+        where: { s_id: surveyId, user: { u_id: userId } },
+      });
+
+      if (!survey) {
+        throw new NotFoundException(
+          `Survey with id ${surveyId} not found for user ${userId}`,
+        );
+      }
+      survey.title = newDescription;
+      await this.surveyRepository.save(survey);
+      return survey;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async getMySurvey(userId: string): Promise<Survey[]> {
     try {
       const mySurveys = await this.surveyRepository.find({

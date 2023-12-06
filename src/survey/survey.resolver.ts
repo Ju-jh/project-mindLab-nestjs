@@ -80,6 +80,22 @@ export class SurveyResolver {
     );
     return finSurveyUpdateTitle;
   }
+  @Mutation(() => Survey)
+  async updatMySurveyDescription(
+    @Args('surveyId') surveyId: string,
+    @Args('newTitle') newDescription: string,
+    @Context('req') req,
+  ): Promise<Survey> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const finSurveyUpdateTitle = await this.surveyService.updateSurveyTitle(
+      userId,
+      surveyId,
+      newDescription,
+    );
+    return finSurveyUpdateTitle;
+  }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];
