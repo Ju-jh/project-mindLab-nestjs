@@ -33,6 +33,7 @@ type Option {
   survey: Survey!
   question: Question!
   answers: Answer!
+  createdAt: DateTime!
 }
 
 type Answer {
@@ -50,6 +51,7 @@ type Question {
   survey: Survey!
   options: [Option!]!
   answers: Answer!
+  createdAt: DateTime!
 }
 
 type Query {
@@ -69,6 +71,7 @@ type Mutation {
   updateMySurveyDescription(surveyId: String!, newDescription: String!): Survey!
   createUser(input: UserInput!): User!
   createQuestion(surveyId: String!): Question!
+  updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
   createOption(surveyId: String!, questionId: String!): Option!
 }

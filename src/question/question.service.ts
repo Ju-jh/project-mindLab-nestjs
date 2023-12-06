@@ -89,7 +89,7 @@ export class QuestionService {
     surveyId: string,
     questionId: string,
     newText: string,
-  ): Promise<any> {
+  ): Promise<Question[]> {
     try {
       const question = await this.questionRepository.findOne({
         where: {
@@ -104,11 +104,11 @@ export class QuestionService {
         );
       }
 
-      question.text = newText; // Update the text property
+      question.text = newText;
 
-      const result = await this.questionRepository.save(question);
+      await this.questionRepository.save(question);
 
-      return [{ q_id: questionId }];
+      return [question];
     } catch (error) {
       this.handleQueryError(`updateQuestionText`, 1, error);
       throw error;
