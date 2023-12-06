@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
 import { Question } from './question.entity';
 import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
@@ -29,6 +29,21 @@ export class QuestionResolver {
       surveyId,
     );
     return createdSurvey;
+  }
+
+  @Query(() => [Question])
+  async getAllQuestions(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Question[]> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const getAllQustion = await this.questionService.getAllQuestions(
+      userId,
+      surveyId,
+    );
+    return getAllQustion;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
