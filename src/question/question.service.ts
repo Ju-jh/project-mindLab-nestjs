@@ -57,7 +57,11 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(userId: string, questionId: string): Promise<any> {
+  async deleteQuestion(
+    userId: string,
+    surveyId: string,
+    questionId: string,
+  ): Promise<any> {
     try {
       const question = await this.questionRepository.find({
         where: {
@@ -67,7 +71,7 @@ export class QuestionService {
 
       if (!question) {
         throw new NotFoundException(
-          `Question with id ${questionId} not found for user or ${userId}`,
+          `Question with id ${questionId} not found for user ${surveyId} or ${userId}`,
         );
       }
 
