@@ -75,9 +75,9 @@ export class QuestionService {
         );
       }
 
-      await this.questionRepository.remove(question);
+      const result = await this.questionRepository.remove(question);
 
-      return question;
+      return result;
     } catch (error) {
       this.handleQueryError(`deleteQuestion`, 1, error);
       throw error;
