@@ -89,12 +89,13 @@ export class SurveyResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const finSurveyUpdateTitle = await this.surveyService.updateSurveyTitle(
-      userId,
-      surveyId,
-      newDescription,
-    );
-    return finSurveyUpdateTitle;
+    const finSurveyUpdateDescription =
+      await this.surveyService.updateSurveyDescription(
+        userId,
+        surveyId,
+        newDescription,
+      );
+    return finSurveyUpdateDescription;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
