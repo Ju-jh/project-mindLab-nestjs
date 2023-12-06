@@ -17,7 +17,7 @@ export class Question {
   q_id: string;
 
   @Field()
-  @Column()
+  @Column({ default: '제목을 입력하세요' })
   text: string;
 
   @Field(() => Survey)
