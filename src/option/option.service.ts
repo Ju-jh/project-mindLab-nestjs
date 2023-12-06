@@ -1,4 +1,55 @@
-import { Injectable } from '@nestjs/common';
-
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Survey } from 'src/survey/survey.entity';
+import { Option } from './option.entity';
+import { Question } from 'src/question/question.entity';
 @Injectable()
-export class OptionService {}
+export class OptionService {
+  private readonly logger = new Logger(OptionService.name);
+
+  constructor(
+    @InjectRepository(Option)
+    private optionRepository: Repository<Option>,
+    @InjectRepository(Question)
+    private questionRepository: Repository<Question>,
+    @InjectRepository(Survey)
+    private surveyRepository: Repository<Survey>,
+  ) {}
+  private handleQueryError(
+    methodName: string,
+    id: number,
+    error: Error,
+  ): never {
+    this.logger.error(`Error in ${methodName}: ${error.message}`);
+    throw new Error(
+      `Failed to fetch ${methodName.toLowerCase()} with id ${id}`,
+    );
+  }
+
+  async createOption(
+    userId: string,
+    surveyId: string,
+    questionId: string,
+  ): Promise<any> {
+    try {
+      const survey = await this.surveyRepository.findOne({
+        where: { s_id: surveyId },
+        relations: ['questions'],
+      });
+
+      const question = survey.questions.find((q) => q.q_id === questionId);
+
+      const newOption = this.optionRepository.create({
+        survey: survey,
+        question: question,
+      });
+      const savedOption = await this.optionRepository.save(newOption);
+
+      return savedOption;
+    } catch (error) {
+      this.handleQueryError('createOption', 0, error);
+      throw error;
+    }
+  }
+}

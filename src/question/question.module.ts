@@ -15,5 +15,6 @@ import { Repository } from 'typeorm';
     SurveyModule,
   ],
   providers: [QuestionResolver, UserService, QuestionService],
+  exports: [TypeOrmModule],
 })
 export class QuestionModule {}

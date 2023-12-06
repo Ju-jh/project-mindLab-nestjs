@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Option {
-  o_id: ID!
-  text: String!
-  score: Float!
-  question: Question!
-  answers: Answer!
-}
-
 type User {
   u_id: ID!
   email: String!
@@ -32,6 +24,15 @@ type Survey {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
+
+type Option {
+  o_id: ID!
+  text: String!
+  score: Float!
+  survey: Survey!
+  question: Question!
+  answers: Answer!
+}
 
 type Answer {
   a_id: ID!
