@@ -15,8 +15,8 @@ type Survey {
   title: String!
   description: String!
   user: User!
-  questions: Question!
-  answers: Answer!
+  questions: [Question!]!
+  answers: [Answer!]!
   createdAt: DateTime!
 }
 
@@ -47,6 +47,7 @@ type Question {
   q_id: ID!
   text: String!
   survey: Survey!
+  options: [Option!]!
   answers: Answer!
 }
 

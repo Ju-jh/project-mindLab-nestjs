@@ -32,11 +32,11 @@ export class Survey {
   @ManyToOne(() => User, (user) => user.surveys)
   user: User;
 
-  @Field(() => Question)
+  @Field(() => [Question])
   @OneToMany(() => Question, (question) => question.survey)
   questions: Question[];
 
-  @Field(() => Answer)
+  @Field(() => [Answer])
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
 

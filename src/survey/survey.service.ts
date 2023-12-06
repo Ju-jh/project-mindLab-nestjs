@@ -36,6 +36,7 @@ export class SurveyService {
     try {
       const survey = await this.surveyRepository.findOne({
         where: { s_id: surveyId, user: { u_id: userId } },
+        relations: ['questions', 'questions.options'],
       });
       if (!survey) {
         throw new NotFoundException(
