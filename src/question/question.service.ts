@@ -66,7 +66,7 @@ export class QuestionService {
       const question = await this.questionRepository.findOne({
         where: {
           q_id: questionId,
-          survey: { s_id: surveyId, user: { u_id: userId } },
+          survey: { s_id: surveyId },
         },
       });
 
