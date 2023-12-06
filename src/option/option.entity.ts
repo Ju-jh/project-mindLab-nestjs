@@ -8,6 +8,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  CreateDateColumn,
 } from 'typeorm';
 
 @Entity()
@@ -36,4 +37,8 @@ export class Option {
   @Field(() => Answer)
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
+
+  @Field()
+  @CreateDateColumn()
+  createdAt: Date;
 }
