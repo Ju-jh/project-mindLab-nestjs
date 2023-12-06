@@ -48,7 +48,6 @@ export class QuestionResolver {
 
   @Mutation(() => [Question])
   async deleteQuestion(
-    @Args('surveyId') surveyId: string,
     @Args('questionId') questionId: string,
     @Context('req') req,
   ): Promise<Question[]> {
@@ -57,7 +56,6 @@ export class QuestionResolver {
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const getAllQustion = await this.questionService.deleteQuestion(
       userId,
-      surveyId,
       questionId,
     );
     return getAllQustion;
