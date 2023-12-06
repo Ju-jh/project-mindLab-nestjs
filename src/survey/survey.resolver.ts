@@ -65,7 +65,7 @@ export class SurveyResolver {
   }
 
   @Mutation(() => Survey)
-  async updatMySurveyTitle(
+  async MySurvey(
     @Args('surveyId') surveyId: string,
     @Args('newTitle') newTitle: string,
     @Context('req') req,
@@ -80,6 +80,18 @@ export class SurveyResolver {
     );
     return finSurveyUpdateTitle;
   }
+  @Mutation(() => Survey)
+  async getSurveyData(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Survey> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const result = await this.surveyService.getSurveyData(userId, surveyId);
+    return result;
+  }
+
   @Mutation(() => Survey)
   async updateMySurveyDescription(
     @Args('surveyId') surveyId: string,
