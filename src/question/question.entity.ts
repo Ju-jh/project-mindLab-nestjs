@@ -1,6 +1,5 @@
 import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Answer } from 'src/answer/answer.entity';
-import { Option } from 'src/option/option.entity';
 import { Survey } from 'src/survey/survey.entity';
 import {
   Entity,
@@ -25,11 +24,15 @@ export class Question {
   @ManyToOne(() => Survey, (survey) => survey.questions)
   survey: Survey;
 
-  @Field(() => Option)
-  @OneToMany(() => Option, (option) => option.question)
-  options: Option[];
+  @Field(() => [Question])
+  @OneToMany(() => Question, (question) => question.survey, {
+    eager: true,
+    cascade: true,
+  })
+  questions: Question[];
 
   @Field(() => Answer)
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
+  options: any;
 }

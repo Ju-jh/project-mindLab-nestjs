@@ -1,9 +1,52 @@
-import { Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Question } from './question.entity';
+import { UserService } from 'src/user/user.service';
+import { QuestionService } from './question.service';
+import { JwtPayload, verify } from 'jsonwebtoken';
 
+interface UserPayload extends JwtPayload {
+  user: {
+    email: string;
+  };
+}
 @Resolver()
 export class QuestionResolver {
-  @Query(() => Boolean)
-  isPizzaGood(): boolean {
-    return true;
+  constructor(
+    private readonly questionService: QuestionService,
+    private readonly userService: UserService,
+  ) {}
+
+  @Mutation(() => Question)
+  async createQuestion(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Question> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const createdSurvey = await this.questionService.createQuestion(
+      userId,
+      surveyId,
+    );
+    return createdSurvey;
+  }
+
+  private extractEmailFromCookie(cookieHeader: string): string | null {
+    const cookies = cookieHeader ? cookieHeader.split(';') : [];
+    for (const cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      let accessToken = null;
+      if (name === 'accessToken') {
+        accessToken = value;
+        const decodedToken: UserPayload = verify(
+          accessToken,
+          process.env.ACCESS_TOKEN_PRIVATE_KEY,
+        ) as UserPayload;
+        if (decodedToken && decodedToken.user && decodedToken.user.email) {
+          const userEmail = decodedToken.user.email;
+          return userEmail;
+        }
+      }
+    }
   }
 }

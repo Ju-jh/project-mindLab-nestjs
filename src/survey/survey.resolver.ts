@@ -48,12 +48,20 @@ export class SurveyResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    console.log(surveyId, 'surveyId입니다');
     const deleteSurvey = await this.surveyService.deleteSurvey(
       surveyId,
       userId,
     );
     return deleteSurvey;
+  }
+
+  @Query(() => [Survey])
+  async getMyWhichSurvey(@Context('req') req): Promise<Survey[]> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const mySurveys = await this.surveyService.getMySurvey(userId);
+    return mySurveys;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
@@ -69,7 +77,6 @@ export class SurveyResolver {
         ) as UserPayload;
         if (decodedToken && decodedToken.user && decodedToken.user.email) {
           const userEmail = decodedToken.user.email;
-          console.log(userEmail, '여기가 userEmail');
           return userEmail;
         }
       }
