@@ -70,7 +70,7 @@ export class SurveyService {
           `Survey with id ${surveyId} not found for user ${userId}`,
         );
       }
-      survey.title = newDescription;
+      survey.description = newDescription;
       await this.surveyRepository.save(survey);
       return survey;
     } catch (error) {
