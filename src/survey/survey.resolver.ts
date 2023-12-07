@@ -126,7 +126,11 @@ export class SurveyResolver {
     if (!surveyToUpdate) {
       throw new Error(`Survey ${surveyId} with User ${userId} not found`);
     }
-    surveyToUpdate.public = true;
+    if (surveyToUpdate.public) {
+      surveyToUpdate.public = false;
+    } else {
+      surveyToUpdate.public = true;
+    }
 
     const result = await this.surveyService.saveSurvey(surveyToUpdate);
 
