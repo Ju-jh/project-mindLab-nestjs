@@ -65,4 +65,27 @@ export class OptionService {
       throw error;
     }
   }
+
+  async updateOptionTextAndScore(
+    userId: string,
+    optionId: string,
+    newText: string,
+    newScore: number,
+  ): Promise<Option> {
+    const option = await this.optionRepository.findOne({
+      where: { o_id: optionId },
+      relations: ['survey', 'question'],
+    });
+
+    if (!option) {
+      throw new NotFoundException('Option not found');
+    }
+
+    option.text = newText;
+    option.score = newScore;
+
+    const updatedOption = await this.optionRepository.save(option);
+
+    return updatedOption;
+  }
 }

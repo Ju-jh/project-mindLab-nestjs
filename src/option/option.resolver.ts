@@ -33,6 +33,31 @@ export class OptionResolver {
     return createdSurvey;
   }
 
+  @Mutation(() => Option)
+  async updateOptionTextAndScore(
+    @Args('optionId') optionId: string,
+    @Args('newText') newText: string,
+    @Args('newScore') newScore: number,
+    @Context('req') req,
+  ): Promise<Option> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const updatedOption = await this.optionService.updateOptionTextAndScore(
+      userId,
+      optionId,
+      newText,
+      newScore,
+    );
+    return updatedOption;
+  }
+
+  // @Mutation(() => Option)
+  // async deleteOption(@Args('optionId') optionId: string): Promise<Option> {
+  //   await this.optionService.deleteOption(optionId);
+  //   return null;
+  // }
+
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];
     for (const cookie of cookies) {
