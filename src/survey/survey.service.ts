@@ -106,6 +106,17 @@ export class SurveyService {
     }
   }
 
+  async getPublicSurvey(): Promise<Survey[]> {
+    try {
+      const publicSurveys = await this.surveyRepository.find({
+        where: { public: true },
+      });
+      return publicSurveys;
+    } catch (error) {
+      this.handleQueryError('getMySurvey', 4, error);
+    }
+  }
+
   async getAllSurvey(): Promise<Survey[]> {
     try {
       const AllSurveys = await this.surveyRepository.find();

@@ -56,7 +56,7 @@ type Question {
 
 type Query {
   getMySurvey: [Survey!]!
-  getAllSurvey: [Survey!]!
+  getPublicSurvey: [Survey!]!
   getMyWhichSurvey: [Survey!]!
   getAllQuestions(surveyId: String!): [Question!]!
   isPizzaGood: Boolean!

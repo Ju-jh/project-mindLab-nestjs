@@ -33,11 +33,10 @@ export class SurveyResolver {
     const mySurveys = await this.surveyService.getMySurvey(userId);
     return mySurveys;
   }
-
   @Query(() => [Survey])
-  async getAllSurvey(): Promise<Survey[]> {
-    const mySurveys = await this.surveyService.getAllSurvey();
-    return mySurveys;
+  async getPublicSurvey(): Promise<Survey[]> {
+    const publicSurveys = await this.surveyService.getPublicSurvey();
+    return publicSurveys;
   }
 
   @Mutation(() => Survey)
