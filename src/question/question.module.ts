@@ -7,10 +7,11 @@ import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
 import { SurveyModule } from 'src/survey/survey.module';
 import { Repository } from 'typeorm';
+import { Option } from 'src/option/option.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Question, Repository]),
+    TypeOrmModule.forFeature([Question, Option, Repository]),
     UserModule,
     SurveyModule,
   ],

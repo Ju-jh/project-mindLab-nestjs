@@ -3,11 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Question } from './question.entity';
 import { Survey } from 'src/survey/survey.entity';
+import { Option } from 'src/option/option.entity';
 @Injectable()
 export class QuestionService {
   private readonly logger = new Logger(QuestionService.name);
 
   constructor(
+    @InjectRepository(Option)
+    private optionRepository: Repository<Option>,
     @InjectRepository(Question)
     private questionRepository: Repository<Question>,
     @InjectRepository(Survey)
@@ -63,19 +66,10 @@ export class QuestionService {
     questionId: string,
   ): Promise<any> {
     try {
-      const question = await this.questionRepository.findOne({
-        where: {
-          q_id: questionId,
-        },
-      });
+      await this.optionRepository.delete({ question: { q_id: questionId } });
 
-      if (!question) {
-        throw new NotFoundException(
-          `Question with id ${questionId} not found for user ${surveyId} or ${userId}`,
-        );
-      }
-
-      const result = await this.questionRepository.remove(question);
+      // 그 후 question 레코드를 삭제
+      const result = await this.questionRepository.delete({ q_id: questionId });
 
       return [{ q_id: questionId }];
     } catch (error) {

@@ -56,13 +56,13 @@ export class QuestionResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const getAllQustion = await this.questionService.updateQuestionText(
+    const getAllQuestion = await this.questionService.updateQuestionText(
       userId,
       surveyId,
       questionId,
       newText,
     );
-    return getAllQustion;
+    return getAllQuestion;
   }
 
   @Mutation(() => [Question])
