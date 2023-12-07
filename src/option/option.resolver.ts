@@ -38,13 +38,8 @@ export class OptionResolver {
     @Args('optionId') optionId: string,
     @Args('newText') newText: string,
     @Args('newScore') newScore: number,
-    @Context('req') req,
   ): Promise<Option> {
-    const cookieHeader = await req.headers.cookie;
-    const userEmail = this.extractEmailFromCookie(cookieHeader);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
     const updatedOption = await this.optionService.updateOptionTextAndScore(
-      userId,
       optionId,
       newText,
       newScore,

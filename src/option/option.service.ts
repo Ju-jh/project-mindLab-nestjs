@@ -67,7 +67,6 @@ export class OptionService {
   }
 
   async updateOptionTextAndScore(
-    userId: string,
     optionId: string,
     newText: string,
     newScore: number,
