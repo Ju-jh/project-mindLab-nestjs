@@ -110,6 +110,28 @@ export class SurveyResolver {
     return finSurveyUpdateDescription;
   }
 
+  @Mutation(() => Survey)
+  async updateMySurveyIsPublic(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Survey> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const surveyToUpdate = await this.surveyService.findSurveyByIdAndUserId(
+      surveyId,
+      userId,
+    );
+    if (!surveyToUpdate) {
+      throw new Error(`Survey ${surveyId} with User ${userId} not found`);
+    }
+    surveyToUpdate.public = true;
+
+    const result = await this.surveyService.saveSurvey(surveyToUpdate);
+
+    return result;
+  }
+
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];
     for (const cookie of cookies) {

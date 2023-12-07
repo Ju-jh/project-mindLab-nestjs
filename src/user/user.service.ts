@@ -2,8 +2,8 @@ import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { User } from './user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserInput } from './user.input';
 import { verify, JwtPayload } from 'jsonwebtoken';
+import { UserInput } from './user.input';
 @Injectable()
 export class UserService {
   private readonly logger = new Logger(UserService.name);

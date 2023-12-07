@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserResolver } from './user.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from './user.entity';
 import { UserService } from './user.service';
@@ -12,7 +11,7 @@ import { GoogleStrategy } from './google.stratgy';
     TypeOrmModule.forFeature([User]),
     PassportModule.register({ defaultStrategy: 'google', session: true }),
   ],
-  providers: [GoogleStrategy, UserService, UserResolver],
+  providers: [GoogleStrategy, UserService],
   controllers: [UserController],
   exports: [UserService, TypeOrmModule],
 })

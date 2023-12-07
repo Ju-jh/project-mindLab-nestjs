@@ -58,7 +58,6 @@ type Query {
   getMySurvey: [Survey!]!
   getAllSurvey: [Survey!]!
   getMyWhichSurvey: [Survey!]!
-  getUser(email: String!): User!
   getAllQuestions(surveyId: String!): [Question!]!
   isPizzaGood: Boolean!
 }
@@ -69,16 +68,11 @@ type Mutation {
   updateMySurveyTitle(surveyId: String!, newTitle: String!): Survey!
   getSurveyData(surveyId: String!): Survey!
   updateMySurveyDescription(surveyId: String!, newDescription: String!): Survey!
-  createUser(input: UserInput!): User!
+  updateMySurveyIsPublic(surveyId: String!): Survey!
   createQuestion(surveyId: String!): Question!
   updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
   createOption(surveyId: String!, questionId: String!): Option!
   updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): Option!
   deleteOption(optionId: String!): Option!
-}
-
-input UserInput {
-  email: String!
-  photo: String!
 }

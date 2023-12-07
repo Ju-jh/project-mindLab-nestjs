@@ -136,4 +136,17 @@ export class SurveyService {
       this.handleQueryError('deleteSurvey', 5, error);
     }
   }
+
+  async findSurveyByIdAndUserId(
+    surveyId: string,
+    userId: string,
+  ): Promise<Survey | null> {
+    return this.surveyRepository.findOne({
+      where: { s_id: surveyId, user: { u_id: userId } },
+    });
+  }
+
+  async saveSurvey(survey: Survey): Promise<Survey> {
+    return this.surveyRepository.save(survey);
+  }
 }
