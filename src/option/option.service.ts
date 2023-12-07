@@ -90,14 +90,18 @@ export class OptionService {
 
   async deleteOption(optionId: string): Promise<Option> {
     try {
-      const deletedOption = await this.optionRepository.delete(optionId);
+      const option = await this.optionRepository.findOne({
+        where: { o_id: optionId },
+      });
 
-      if (deletedOption.affected === 0) {
-        throw new Error(`Option with ID ${optionId} not found`);
+      if (!option) {
+        throw new NotFoundException(`Option with ID ${optionId} not found`);
       }
 
-      // Assuming raw[0] contains the deleted option
-      return deletedOption.raw[0] as Option;
+      const deletedOption = { ...option };
+      await this.optionRepository.remove(option);
+
+      return deletedOption;
     } catch (error) {
       console.error(`Error deleting option: ${error.message}`);
       throw error;

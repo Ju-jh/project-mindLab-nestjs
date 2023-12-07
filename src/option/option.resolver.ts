@@ -1,4 +1,4 @@
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { OptionService } from './option.service';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload, verify } from 'jsonwebtoken';

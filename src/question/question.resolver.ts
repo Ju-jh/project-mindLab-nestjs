@@ -74,12 +74,12 @@ export class QuestionResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const getAllQustion = await this.questionService.deleteQuestion(
+    const deleteQustion = await this.questionService.deleteQuestion(
       userId,
       surveyId,
       questionId,
     );
-    return getAllQustion;
+    return deleteQustion;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
