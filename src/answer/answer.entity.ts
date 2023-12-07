@@ -8,9 +8,10 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   CreateDateColumn,
+  Column,
 } from 'typeorm';
 
-@Entity()
+@Entity('answer')
 @ObjectType()
 export class Answer {
   @PrimaryGeneratedColumn('uuid')
@@ -32,6 +33,10 @@ export class Answer {
   @Field(() => Option)
   @ManyToOne(() => Option, (option) => option.answers)
   option: Option;
+
+  @Field()
+  @Column()
+  score: number;
 
   @Field()
   @CreateDateColumn()

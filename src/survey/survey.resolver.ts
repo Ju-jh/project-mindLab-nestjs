@@ -33,6 +33,7 @@ export class SurveyResolver {
     const mySurveys = await this.surveyService.getMySurvey(userId);
     return mySurveys;
   }
+
   @Query(() => [Survey])
   async getPublicSurvey(): Promise<Survey[]> {
     const publicSurveys = await this.surveyService.getPublicSurvey();

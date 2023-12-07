@@ -3,7 +3,7 @@ import { Answer } from 'src/answer/answer.entity';
 import { Survey } from 'src/survey/survey.entity';
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 
-@Entity()
+@Entity('user')
 @ObjectType()
 export class User {
   @Field(() => ID)

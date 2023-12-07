@@ -42,6 +42,7 @@ type Answer {
   survey: Survey!
   question: Question!
   option: Option!
+  score: Float!
   createdAt: DateTime!
 }
 
@@ -54,12 +55,16 @@ type Question {
   createdAt: DateTime!
 }
 
+type SaveAnswerResponse {
+  success: Boolean!
+  message: String!
+}
+
 type Query {
   getMySurvey: [Survey!]!
   getPublicSurvey: [Survey!]!
   getMyWhichSurvey: [Survey!]!
   getAllQuestions(surveyId: String!): [Question!]!
-  isPizzaGood: Boolean!
 }
 
 type Mutation {
@@ -76,4 +81,11 @@ type Mutation {
   createOption(surveyId: String!, questionId: String!): Option!
   updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): Option!
   deleteOption(optionId: String!): Option!
+  saveAnswers(surveyId: String!, answers: [AnswerInput!]!): SaveAnswerResponse!
+}
+
+input AnswerInput {
+  questionId: String!
+  optionId: String!
+  score: Float!
 }

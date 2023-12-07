@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('question')
 @ObjectType()
 export class Question {
   @Field(() => ID)

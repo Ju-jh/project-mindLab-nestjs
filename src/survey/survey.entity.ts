@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('survey')
 @ObjectType()
 export class Survey {
   @Field(() => ID)

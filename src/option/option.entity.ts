@@ -11,7 +11,7 @@ import {
   CreateDateColumn,
 } from 'typeorm';
 
-@Entity()
+@Entity('option')
 @ObjectType()
 export class Option {
   @Field(() => ID)
@@ -41,4 +41,5 @@ export class Option {
   @Field()
   @CreateDateColumn()
   createdAt: Date;
+  raw: any;
 }
