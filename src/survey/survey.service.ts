@@ -45,7 +45,7 @@ export class SurveyService {
       }
       return survey;
     } catch (error) {
-      throw error;
+      this.handleQueryError('getSurveyData', 1, error);
     }
   }
 
@@ -68,7 +68,7 @@ export class SurveyService {
       await this.surveyRepository.save(survey);
       return survey;
     } catch (error) {
-      throw error;
+      this.handleQueryError('updateSurveyTitle', 2, error);
     }
   }
 
@@ -91,7 +91,7 @@ export class SurveyService {
       await this.surveyRepository.save(survey);
       return survey;
     } catch (error) {
-      throw error;
+      this.handleQueryError('updateSurveyDescription', 3, error);
     }
   }
 
@@ -102,8 +102,7 @@ export class SurveyService {
       });
       return mySurveys;
     } catch (error) {
-      console.error('Error while getting user surveys:', error);
-      throw error;
+      this.handleQueryError('getMySurvey', 4, error);
     }
   }
 
@@ -112,8 +111,7 @@ export class SurveyService {
       const AllSurveys = await this.surveyRepository.find();
       return AllSurveys;
     } catch (error) {
-      console.error('Error while getting all surveys:', error);
-      throw error;
+      this.handleQueryError('getAllSurvey', 4, error);
     }
   }
 
@@ -135,8 +133,7 @@ export class SurveyService {
         );
       }
     } catch (error) {
-      console.error('설문지 삭제 중 오류 발생:', error);
-      throw error;
+      this.handleQueryError('deleteSurvey', 5, error);
     }
   }
 }

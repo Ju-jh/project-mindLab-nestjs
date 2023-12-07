@@ -52,7 +52,7 @@ export class QuestionService {
         where: { survey: { s_id: surveyId, user: { u_id: userId } } },
       });
     } catch (error) {
-      this.handleQueryError(`getAllQuestions`, 0, error);
+      this.handleQueryError(`getAllQuestions`, 1, error);
       throw error;
     }
   }
@@ -63,7 +63,7 @@ export class QuestionService {
     questionId: string,
   ): Promise<any> {
     try {
-      const question = await this.questionRepository.find({
+      const question = await this.questionRepository.findOne({
         where: {
           q_id: questionId,
         },
@@ -79,7 +79,7 @@ export class QuestionService {
 
       return [{ q_id: questionId }];
     } catch (error) {
-      this.handleQueryError(`deleteQuestion`, 1, error);
+      this.handleQueryError(`deleteQuestion`, 2, error);
       throw error;
     }
   }
@@ -110,7 +110,7 @@ export class QuestionService {
 
       return [question];
     } catch (error) {
-      this.handleQueryError(`updateQuestionText`, 1, error);
+      this.handleQueryError(`updateQuestionText`, 3, error);
       throw error;
     }
   }
