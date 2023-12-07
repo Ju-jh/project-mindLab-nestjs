@@ -87,4 +87,20 @@ export class OptionService {
 
     return updatedOption;
   }
+
+  async deleteOption(optionId: string): Promise<Option> {
+    try {
+      const deletedOption = await this.optionRepository.delete(optionId);
+
+      if (deletedOption.affected === 0) {
+        throw new Error(`Option with ID ${optionId} not found`);
+      }
+
+      // Assuming raw[0] contains the deleted option
+      return deletedOption.raw[0] as Option;
+    } catch (error) {
+      console.error(`Error deleting option: ${error.message}`);
+      throw error;
+    }
+  }
 }

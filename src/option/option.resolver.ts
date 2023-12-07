@@ -47,11 +47,11 @@ export class OptionResolver {
     return updatedOption;
   }
 
-  // @Mutation(() => Option)
-  // async deleteOption(@Args('optionId') optionId: string): Promise<Option> {
-  //   await this.optionService.deleteOption(optionId);
-  //   return null;
-  // }
+  @Mutation(() => Option)
+  async deleteOption(@Args('optionId') optionId: string): Promise<Option> {
+    const deletedOption = await this.optionService.deleteOption(optionId);
+    return deletedOption;
+  }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
     const cookies = cookieHeader ? cookieHeader.split(';') : [];

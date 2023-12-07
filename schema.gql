@@ -75,6 +75,7 @@ type Mutation {
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
   createOption(surveyId: String!, questionId: String!): Option!
   updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): Option!
+  deleteOption(optionId: String!): Option!
 }
 
 input UserInput {
