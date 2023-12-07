@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Survey } from 'src/survey/survey.entity';
 import { Option } from './option.entity';
 import { Question } from 'src/question/question.entity';
+
 @Injectable()
 export class OptionService {
   private readonly logger = new Logger(OptionService.name);
@@ -16,6 +17,7 @@ export class OptionService {
     @InjectRepository(Survey)
     private surveyRepository: Repository<Survey>,
   ) {}
+
   private handleQueryError(
     methodName: string,
     id: number,
@@ -38,12 +40,23 @@ export class OptionService {
         relations: ['questions'],
       });
 
+      if (!survey) {
+        throw new NotFoundException(`Survey with id ${surveyId} not found.`);
+      }
+
       const question = survey.questions.find((q) => q.q_id === questionId);
+
+      if (!question) {
+        throw new NotFoundException(
+          `Question with id ${questionId} not found.`,
+        );
+      }
 
       const newOption = this.optionRepository.create({
         survey: survey,
         question: question,
       });
+
       const savedOption = await this.optionRepository.save(newOption);
 
       return savedOption;
