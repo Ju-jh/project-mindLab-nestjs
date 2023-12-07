@@ -9,7 +9,7 @@ interface UserPayload extends JwtPayload {
     email: string;
   };
 }
-@Resolver()
+@Resolver('Survey')
 export class SurveyResolver {
   constructor(
     private readonly surveyService: SurveyService,
@@ -80,6 +80,7 @@ export class SurveyResolver {
     );
     return finSurveyUpdateTitle;
   }
+
   @Mutation(() => Survey)
   async getSurveyData(
     @Args('surveyId') surveyId: string,
@@ -130,6 +131,25 @@ export class SurveyResolver {
     const result = await this.surveyService.saveSurvey(surveyToUpdate);
 
     return result;
+  }
+
+  @Mutation(() => Survey)
+  async checkMySurveyIsPublic(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<Survey> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    const surveyToUpdate = await this.surveyService.findSurveyByIdAndUserId(
+      surveyId,
+      userId,
+    );
+    if (!surveyToUpdate) {
+      throw new Error(`Survey ${surveyId} with User ${userId} not found`);
+    }
+
+    return surveyToUpdate;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {

@@ -140,7 +140,7 @@ export class SurveyService {
   async findSurveyByIdAndUserId(
     surveyId: string,
     userId: string,
-  ): Promise<Survey | null> {
+  ): Promise<Survey> {
     return this.surveyRepository.findOne({
       where: { s_id: surveyId, user: { u_id: userId } },
     });

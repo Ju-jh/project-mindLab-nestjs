@@ -69,6 +69,7 @@ type Mutation {
   getSurveyData(surveyId: String!): Survey!
   updateMySurveyDescription(surveyId: String!, newDescription: String!): Survey!
   updateMySurveyIsPublic(surveyId: String!): Survey!
+  checkMySurveyIsPublic(surveyId: String!): Survey!
   createQuestion(surveyId: String!): Question!
   updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!

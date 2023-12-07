@@ -19,17 +19,14 @@ export class Survey {
   s_id: string;
 
   @Field()
-  @Column()
   @Column({ default: '무제' })
   title: string;
 
   @Field()
-  @Column()
   @Column({ default: '' })
   description: string;
 
-  @Field()
-  @Column()
+  @Field(() => Boolean)
   @Column({ default: false })
   public: boolean;
 
