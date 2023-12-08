@@ -70,25 +70,6 @@ export class QuestionResolver {
     }
   }
 
-  @Mutation(() => [Question])
-  async updateQuestionText(
-    @Args('surveyId') surveyId: string,
-    @Args('questionId') questionId: string,
-    @Args('newText') newText: string,
-    @Context('req') req,
-  ): Promise<Question[]> {
-    const cookieHeader = await req.headers.cookie;
-    const userEmail = this.extractEmailFromCookie(cookieHeader);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
-    const getAllQuestion = await this.questionService.updateQuestionText(
-      userId,
-      surveyId,
-      questionId,
-      newText,
-    );
-    return getAllQuestion;
-  }
-
   @Mutation(() => postQuestionrResponse)
   async deleteQuestion(
     @Args('surveyId') surveyId: string,
@@ -105,6 +86,36 @@ export class QuestionResolver {
       return {
         success: false,
         message: '문제 삭제에 실패했습니다.',
+      };
+    }
+  }
+
+  @Mutation(() => postQuestionrResponse)
+  async updateQuestionText(
+    @Args('surveyId') surveyId: string,
+    @Args('questionId') questionId: string,
+    @Args('newText') newText: string,
+    @Context('req') req,
+  ): Promise<postQuestionrResponse> {
+    const cookieHeader = await req.headers.cookie;
+    const userEmail = this.extractEmailFromCookie(cookieHeader);
+    const userId = await this.userService.findUserIdByEmail(userEmail);
+    try {
+      await this.questionService.updateQuestionText(
+        userId,
+        surveyId,
+        questionId,
+        newText,
+      );
+      return {
+        success: true,
+        message: '문제 제목이 성공적으로 스정되었습니다.',
+      };
+    } catch (error) {
+      console.error('문제 제목 수정 실패:', error);
+      return {
+        success: false,
+        message: '문제 제목 수정에 실패했습니다.',
       };
     }
   }

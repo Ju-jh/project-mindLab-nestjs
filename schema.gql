@@ -2,14 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type User {
-  u_id: ID!
-  email: String!
-  photo: String!
-  surveys: [Survey!]
-  answers: [Answer!]
-}
-
 type Survey {
   s_id: ID!
   title: String!
@@ -26,13 +18,22 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Question {
+  q_id: ID!
+  text: String!
+  survey: Survey!
+  options: [Option!]
+  answers: [Answer!]
+  createdAt: DateTime!
+}
+
 type Option {
   o_id: ID!
   text: String!
   score: Float!
   survey: Survey!
   question: Question!
-  answers: Answer!
+  answers: [Answer!]
   createdAt: DateTime!
 }
 
@@ -46,19 +47,29 @@ type Answer {
   createdAt: DateTime!
 }
 
-type Question {
-  q_id: ID!
-  text: String!
-  survey: Survey!
-  options: [Option!]!
-  answers: Answer!
-  createdAt: DateTime!
+type User {
+  u_id: ID!
+  email: String!
+  photo: String!
+  surveys: [Survey!]
+  answers: [Answer!]
+}
+
+type postCreateQuestionrResponse {
+  success: Boolean!
+  message: String!
+  q_id: String!
 }
 
 type postQuestionrResponse {
   success: Boolean!
   message: String!
-  q_id: String!
+}
+
+type getQuestionsResponse {
+  success: Boolean!
+  message: String!
+  questions: [Question!]!
 }
 
 type getSurveysResponse {
@@ -84,6 +95,11 @@ type getSurveyisPublicResponse {
   public: Boolean!
 }
 
+type postOptionResponse {
+  success: Boolean!
+  message: String!
+}
+
 type SaveAnswerResponse {
   success: Boolean!
   message: String!
@@ -92,7 +108,7 @@ type SaveAnswerResponse {
 type Query {
   getMySurvey: getSurveysResponse!
   getPublicSurvey: getSurveysResponse!
-  getAllQuestions(surveyId: String!): [Question!]!
+  getAllQuestions(surveyId: String!): getQuestionsResponse!
 }
 
 type Mutation {
@@ -103,12 +119,12 @@ type Mutation {
   updateMySurveyDescription(surveyId: String!, newDescription: String!): postSurveyResponse!
   updateMySurveyIsPublic(surveyId: String!): postSurveyResponse!
   checkMySurveyIsPublic(surveyId: String!): getSurveyisPublicResponse!
-  createQuestion(surveyId: String!): postQuestionrResponse!
-  updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
-  deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
-  createOption(surveyId: String!, questionId: String!): Option!
-  updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): Option!
-  deleteOption(optionId: String!): Option!
+  createQuestion(surveyId: String!): postCreateQuestionrResponse!
+  deleteQuestion(surveyId: String!, questionId: String!): postQuestionrResponse!
+  updateQuestionText(surveyId: String!, questionId: String!, newText: String!): postQuestionrResponse!
+  createOption(surveyId: String!, questionId: String!): postOptionResponse!
+  updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): postOptionResponse!
+  deleteOption(optionId: String!): postOptionResponse!
   saveAnswers(surveyId: String!, answers: [AnswerInput!]!): SaveAnswerResponse!
 }
 

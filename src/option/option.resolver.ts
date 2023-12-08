@@ -3,6 +3,7 @@ import { OptionService } from './option.service';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { Option } from './option.entity';
+import { postOptionResponse } from './dto/post-option-dto';
 
 interface UserPayload extends JwtPayload {
   user: {
@@ -16,41 +17,72 @@ export class OptionResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Mutation(() => Option)
+  @Mutation(() => postOptionResponse)
   async createOption(
     @Args('surveyId') surveyId: string,
     @Args('questionId') questionId: string,
     @Context('req') req,
-  ): Promise<Option> {
+  ): Promise<postOptionResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const createdSurvey = await this.optionService.createOption(
-      userId,
-      surveyId,
-      questionId,
-    );
-    return createdSurvey;
+    try {
+      await this.optionService.createOption(userId, surveyId, questionId);
+      return {
+        success: true,
+        message: '문항이 성공적으로 생성되었습니다.',
+      };
+    } catch (error) {
+      console.error('문항 생성 실패:', error);
+      return {
+        success: false,
+        message: '문항 생성에 실패했습니다.',
+      };
+    }
   }
 
-  @Mutation(() => Option)
+  @Mutation(() => postOptionResponse)
   async updateOptionTextAndScore(
     @Args('optionId') optionId: string,
     @Args('newText') newText: string,
     @Args('newScore') newScore: number,
-  ): Promise<Option> {
-    const updatedOption = await this.optionService.updateOptionTextAndScore(
-      optionId,
-      newText,
-      newScore,
-    );
-    return updatedOption;
+  ): Promise<postOptionResponse> {
+    try {
+      await this.optionService.updateOptionTextAndScore(
+        optionId,
+        newText,
+        newScore,
+      );
+      return {
+        success: true,
+        message: '문항이 성공적으로 업데이트 되었습니다.',
+      };
+    } catch (error) {
+      console.error('문항 업데이트 실패:', error);
+      return {
+        success: false,
+        message: '문항 업데이트에 실패했습니다.',
+      };
+    }
   }
 
-  @Mutation(() => Option)
-  async deleteOption(@Args('optionId') optionId: string): Promise<Option> {
-    const deletedOption = await this.optionService.deleteOption(optionId);
-    return deletedOption;
+  @Mutation(() => postOptionResponse)
+  async deleteOption(
+    @Args('optionId') optionId: string,
+  ): Promise<postOptionResponse> {
+    try {
+      await this.optionService.deleteOption(optionId);
+      return {
+        success: true,
+        message: '문항이 성공적으로 삭제 되었습니다.',
+      };
+    } catch (error) {
+      console.error('문항 삭제 실패:', error);
+      return {
+        success: false,
+        message: '문항 삭제에 실패했습니다.',
+      };
+    }
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {

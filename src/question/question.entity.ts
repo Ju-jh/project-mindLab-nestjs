@@ -19,18 +19,18 @@ export class Question {
   q_id: string;
 
   @Field()
-  @Column({ default: '제목을 입력하세요' })
+  @Column({ default: '' })
   text: string;
 
   @Field(() => Survey)
   @ManyToOne(() => Survey, (survey) => survey.questions)
   survey: Survey;
 
-  @Field(() => [Option])
+  @Field(() => [Option], { nullable: true })
   @OneToMany(() => Option, (option) => option.question)
   options: Option[];
 
-  @Field(() => Answer)
+  @Field(() => [Answer], { nullable: true })
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
 

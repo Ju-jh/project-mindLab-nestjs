@@ -19,11 +19,11 @@ export class Option {
   o_id: string;
 
   @Field()
-  @Column({ default: '문항 제목을 입력하세요' })
+  @Column({ default: '' })
   text: string;
 
   @Field()
-  @Column({ default: 1 })
+  @Column({ default: 0 })
   score: number;
 
   @Field(() => Survey)
@@ -34,7 +34,7 @@ export class Option {
   @ManyToOne(() => Question, (question) => question.options)
   question: Question;
 
-  @Field(() => Answer)
+  @Field(() => [Answer], { nullable: true })
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
 
