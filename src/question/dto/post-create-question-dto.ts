@@ -1,7 +1,7 @@
 import { ObjectType, Field } from '@nestjs/graphql';
 
 @ObjectType()
-export class postQuestionrResponse {
+export class postCreateQuestionrResponse {
   @Field(() => Boolean)
   success: boolean;
 

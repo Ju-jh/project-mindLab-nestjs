@@ -60,11 +60,7 @@ export class QuestionService {
     }
   }
 
-  async deleteQuestion(
-    userId: string,
-    surveyId: string,
-    questionId: string,
-  ): Promise<any> {
+  async deleteQuestion(questionId: string): Promise<any> {
     try {
       await this.optionRepository.delete({ question: { q_id: questionId } });
 

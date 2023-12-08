@@ -3,7 +3,8 @@ import { Question } from './question.entity';
 import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { postQuestionrResponse } from './dto/post-question-dto';
+import { postCreateQuestionrResponse } from './dto/post-create-question-dto';
+import { postQuestionrResponse } from './dto/post-question-dto copy';
 
 interface UserPayload extends JwtPayload {
   user: {
@@ -17,11 +18,11 @@ export class QuestionResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Mutation(() => postQuestionrResponse)
+  @Mutation(() => postCreateQuestionrResponse)
   async createQuestion(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<postQuestionrResponse> {
+  ): Promise<postCreateQuestionrResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
@@ -77,21 +78,24 @@ export class QuestionResolver {
     return getAllQuestion;
   }
 
-  @Mutation(() => [Question])
+  @Mutation(() => postQuestionrResponse)
   async deleteQuestion(
     @Args('surveyId') surveyId: string,
     @Args('questionId') questionId: string,
-    @Context('req') req,
-  ): Promise<Question[]> {
-    const cookieHeader = await req.headers.cookie;
-    const userEmail = this.extractEmailFromCookie(cookieHeader);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
-    const deleteQustion = await this.questionService.deleteQuestion(
-      userId,
-      surveyId,
-      questionId,
-    );
-    return deleteQustion;
+  ): Promise<postQuestionrResponse> {
+    try {
+      await this.questionService.deleteQuestion(questionId);
+      return {
+        success: true,
+        message: '문제가 성공적으로 삭제되었습니다.',
+      };
+    } catch (error) {
+      console.error('문제 삭제 실패:', error);
+      return {
+        success: false,
+        message: '문제 삭제에 실패했습니다.',
+      };
+    }
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
