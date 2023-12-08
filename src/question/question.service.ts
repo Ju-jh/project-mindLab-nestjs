@@ -45,7 +45,6 @@ export class QuestionService {
       return await this.questionRepository.save(question);
     } catch (error) {
       this.handleQueryError('createQuestion', 0, error);
-      throw error;
     }
   }
 
@@ -56,21 +55,16 @@ export class QuestionService {
       });
     } catch (error) {
       this.handleQueryError(`getAllQuestions`, 1, error);
-      throw error;
     }
   }
 
   async deleteQuestion(questionId: string): Promise<any> {
     try {
       await this.optionRepository.delete({ question: { q_id: questionId } });
-
-      // 그 후 question 레코드를 삭제
-      const result = await this.questionRepository.delete({ q_id: questionId });
-
+      await this.questionRepository.delete({ q_id: questionId });
       return [{ q_id: questionId }];
     } catch (error) {
       this.handleQueryError(`deleteQuestion`, 2, error);
-      throw error;
     }
   }
 
@@ -101,7 +95,6 @@ export class QuestionService {
       return [question];
     } catch (error) {
       this.handleQueryError(`updateQuestionText`, 3, error);
-      throw error;
     }
   }
 }

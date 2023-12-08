@@ -4,7 +4,8 @@ import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { postCreateQuestionrResponse } from './dto/post-create-question-dto';
-import { postQuestionrResponse } from './dto/post-question-dto copy';
+import { postQuestionrResponse } from './dto/post-question-dto';
+import { getQuestionsResponse } from './dto/get-questions-dto';
 
 interface UserPayload extends JwtPayload {
   user: {
@@ -44,19 +45,29 @@ export class QuestionResolver {
     }
   }
 
-  @Query(() => [Question])
+  @Query(() => getQuestionsResponse)
   async getAllQuestions(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<Question[]> {
+  ): Promise<getQuestionsResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const getAllQustion = await this.questionService.getAllQuestions(
-      userId,
-      surveyId,
-    );
-    return getAllQustion;
+    const result = await this.questionService.getAllQuestions(userId, surveyId);
+    try {
+      return {
+        success: true,
+        message: '모든 문제가 성공적으로 로드되었습니다.',
+        questions: result,
+      };
+    } catch (error) {
+      console.error('모든 문제 로드 실패:', error);
+      return {
+        success: false,
+        message: '모든 문제 로드에 실패했습니다.',
+        questions: result,
+      };
+    }
   }
 
   @Mutation(() => [Question])
