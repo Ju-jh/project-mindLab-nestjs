@@ -41,5 +41,4 @@ export class Option {
   @Field()
   @CreateDateColumn()
   createdAt: Date;
-  raw: any;
 }

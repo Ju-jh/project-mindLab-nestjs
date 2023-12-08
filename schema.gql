@@ -55,26 +55,48 @@ type Question {
   createdAt: DateTime!
 }
 
+type getSurveysResponse {
+  success: Boolean!
+  message: String!
+  surveys: [Survey!]!
+}
+
+type postSurveyResponse {
+  success: Boolean!
+  message: String!
+}
+
+type getSurveyResponse {
+  success: Boolean!
+  message: String!
+  survey: Survey!
+}
+
+type getSurveyisPublicResponse {
+  success: Boolean!
+  message: String!
+  public: Boolean!
+}
+
 type SaveAnswerResponse {
   success: Boolean!
   message: String!
 }
 
 type Query {
-  getMySurvey: [Survey!]!
-  getPublicSurvey: [Survey!]!
-  getMyWhichSurvey: [Survey!]!
+  getMySurvey: getSurveysResponse!
+  getPublicSurvey: getSurveysResponse!
   getAllQuestions(surveyId: String!): [Question!]!
 }
 
 type Mutation {
-  createSurvey: Survey!
-  deleteSurvey(surveyId: String!): Survey!
-  updateMySurveyTitle(surveyId: String!, newTitle: String!): Survey!
-  getSurveyData(surveyId: String!): Survey!
-  updateMySurveyDescription(surveyId: String!, newDescription: String!): Survey!
-  updateMySurveyIsPublic(surveyId: String!): Survey!
-  checkMySurveyIsPublic(surveyId: String!): Survey!
+  createSurvey: postSurveyResponse!
+  deleteSurvey(surveyId: String!): postSurveyResponse!
+  getSurveyData(surveyId: String!): getSurveyResponse!
+  updateMySurveyTitle(surveyId: String!, newTitle: String!): postSurveyResponse!
+  updateMySurveyDescription(surveyId: String!, newDescription: String!): postSurveyResponse!
+  updateMySurveyIsPublic(surveyId: String!): postSurveyResponse!
+  checkMySurveyIsPublic(surveyId: String!): getSurveyisPublicResponse!
   createQuestion(surveyId: String!): Question!
   updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!

@@ -3,6 +3,10 @@ import { Survey } from './survey.entity';
 import { SurveyService } from './survey.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { UserService } from 'src/user/user.service';
+import { getSurveysResponse } from './dto/get-surveys-dto';
+import { postSurveyResponse } from './dto/post-survey-dto';
+import { getSurveyResponse } from './dto/get-survey-dto';
+import { getSurveyisPublicResponse } from './dto/get-survey-is-public-dto';
 
 interface UserPayload extends JwtPayload {
   user: {
@@ -16,106 +20,173 @@ export class SurveyResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Mutation(() => Survey)
-  async createSurvey(@Context('req') req): Promise<Survey> {
+  @Mutation(() => postSurveyResponse)
+  async createSurvey(@Context('req') req): Promise<postSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const createdSurvey = await this.surveyService.createSurvey(userId);
-    return createdSurvey;
+    try {
+      await this.surveyService.createSurvey(userId);
+      return {
+        success: true,
+        message: '설문지가 성공적으로 생성되었습니다.',
+      };
+    } catch (error) {
+      console.error('설문지 생성 실패:', error);
+      return {
+        success: false,
+        message: '설문지 생성에 실패했습니다.',
+      };
+    }
   }
 
-  @Query(() => [Survey])
-  async getMySurvey(@Context('req') req): Promise<Survey[]> {
+  @Query(() => getSurveysResponse)
+  async getMySurvey(@Context('req') req): Promise<getSurveysResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
     const mySurveys = await this.surveyService.getMySurvey(userId);
-    return mySurveys;
+
+    try {
+      return {
+        success: true,
+        message: '나의 설문지 로드에 성공적으로 생성되었습니다.',
+        surveys: mySurveys,
+      };
+    } catch (error) {
+      console.error('나의 설문지 로드에 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지 로드에 실패했습니다.',
+        surveys: mySurveys,
+      };
+    }
   }
 
-  @Query(() => [Survey])
-  async getPublicSurvey(): Promise<Survey[]> {
+  @Query(() => getSurveysResponse)
+  async getPublicSurvey(): Promise<getSurveysResponse> {
     const publicSurveys = await this.surveyService.getPublicSurvey();
-    return publicSurveys;
+    try {
+      return {
+        success: true,
+        message: '공개된 설문지 로드에 성공적으로 생성되었습니다.',
+        surveys: publicSurveys,
+      };
+    } catch (error) {
+      console.error('공개된 설문지 로드에 실패:', error);
+      return {
+        success: false,
+        message: '공개된 설문지 로드에 실패했습니다.',
+        surveys: publicSurveys,
+      };
+    }
   }
 
-  @Mutation(() => Survey)
+  @Mutation(() => postSurveyResponse)
   async deleteSurvey(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<any> {
+  ): Promise<postSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const deleteSurvey = await this.surveyService.deleteSurvey(
-      surveyId,
-      userId,
-    );
-    return deleteSurvey;
+    try {
+      await this.surveyService.deleteSurvey(surveyId, userId);
+      return {
+        success: true,
+        message: '나의설문지가 성공적으로 삭제되었습니다.',
+      };
+    } catch (error) {
+      console.error('나의설문지 삭제 실패:', error);
+      return {
+        success: false,
+        message: '나의설문지 삭제에 실패했습니다.',
+      };
+    }
   }
 
-  @Query(() => [Survey])
-  async getMyWhichSurvey(@Context('req') req): Promise<Survey[]> {
+  @Mutation(() => getSurveyResponse)
+  async getSurveyData(
+    @Args('surveyId') surveyId: string,
+    @Context('req') req,
+  ): Promise<getSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const mySurveys = await this.surveyService.getMySurvey(userId);
-    return mySurveys;
+    const Survey = await this.surveyService.getSurveyData(userId, surveyId);
+    try {
+      return {
+        success: true,
+        message: '나의 설문지 데이터 로드에 성공적으로 생성되었습니다.',
+        survey: Survey,
+      };
+    } catch (error) {
+      console.error('나의 설문지 데이터 로드에 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지 데이터 로드에 실패했습니다.',
+        survey: Survey,
+      };
+    }
   }
 
-  @Mutation(() => Survey)
+  @Mutation(() => postSurveyResponse)
   async updateMySurveyTitle(
     @Args('surveyId') surveyId: string,
     @Args('newTitle') newTitle: string,
     @Context('req') req,
-  ): Promise<Survey> {
+  ): Promise<postSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const finSurveyUpdateTitle = await this.surveyService.updateSurveyTitle(
-      userId,
-      surveyId,
-      newTitle,
-    );
-    return finSurveyUpdateTitle;
+    await this.surveyService.updateSurveyTitle(userId, surveyId, newTitle);
+    try {
+      return {
+        success: true,
+        message: '나의 설문지의 제목이 성공적으로 수정되었습니다.',
+      };
+    } catch (error) {
+      console.error('나의 설문지의 제목이 성공적으로 수정 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지의 제목이 성공적으로 수정 실패했습니다.',
+      };
+    }
   }
 
-  @Mutation(() => Survey)
-  async getSurveyData(
-    @Args('surveyId') surveyId: string,
-    @Context('req') req,
-  ): Promise<Survey> {
-    const cookieHeader = await req.headers.cookie;
-    const userEmail = this.extractEmailFromCookie(cookieHeader);
-    const userId = await this.userService.findUserIdByEmail(userEmail);
-    const result = await this.surveyService.getSurveyData(userId, surveyId);
-    return result;
-  }
-
-  @Mutation(() => Survey)
+  @Mutation(() => postSurveyResponse)
   async updateMySurveyDescription(
     @Args('surveyId') surveyId: string,
     @Args('newDescription') newDescription: string,
     @Context('req') req,
-  ): Promise<Survey> {
+  ): Promise<postSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const finSurveyUpdateDescription =
+    try {
       await this.surveyService.updateSurveyDescription(
         userId,
         surveyId,
         newDescription,
       );
-    return finSurveyUpdateDescription;
+      return {
+        success: true,
+        message: '나의 설문지의 설명이 성공적으로 수정되었습니다.',
+      };
+    } catch (error) {
+      console.error('나의 설문지의 설명이 성공적으로 수정 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지의 설명이 성공적으로 수정 실패했습니다.',
+      };
+    }
   }
 
-  @Mutation(() => Survey)
+  @Mutation(() => postSurveyResponse)
   async updateMySurveyIsPublic(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<Survey> {
+  ): Promise<postSurveyResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
@@ -123,37 +194,52 @@ export class SurveyResolver {
       surveyId,
       userId,
     );
-    if (!surveyToUpdate) {
-      throw new Error(`Survey ${surveyId} with User ${userId} not found`);
+    try {
+      if (surveyToUpdate.public) {
+        surveyToUpdate.public = false;
+      } else {
+        surveyToUpdate.public = true;
+      }
+      await this.surveyService.saveSurvey(surveyToUpdate);
+      return {
+        success: true,
+        message: '나의 설문지가 성공적으로 Public(Private)되었습니다.',
+      };
+    } catch (error) {
+      console.error('나의 설문지 Public(Private)에 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지가 Public(Private)에 실패했습니다.',
+      };
     }
-    if (surveyToUpdate.public) {
-      surveyToUpdate.public = false;
-    } else {
-      surveyToUpdate.public = true;
-    }
-
-    const result = await this.surveyService.saveSurvey(surveyToUpdate);
-
-    return result;
   }
 
-  @Mutation(() => Survey)
+  @Mutation(() => getSurveyisPublicResponse)
   async checkMySurveyIsPublic(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<Survey> {
+  ): Promise<getSurveyisPublicResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const surveyToUpdate = await this.surveyService.findSurveyByIdAndUserId(
+    const isSurveyPublic = await this.surveyService.findSurveyByIdAndUserId(
       surveyId,
       userId,
     );
-    if (!surveyToUpdate) {
-      throw new Error(`Survey ${surveyId} with User ${userId} not found`);
+    try {
+      return {
+        success: true,
+        message: '나의 설문지의 Public(Private)여부가 확인 되었습니다.',
+        public: isSurveyPublic.public,
+      };
+    } catch (error) {
+      console.error('나의 설문지의 Public(Private)여부가 확인에 실패:', error);
+      return {
+        success: false,
+        message: '나의 설문지의 Public(Private)여부가 확인에 실패했습니다.',
+        public: isSurveyPublic.public,
+      };
     }
-
-    return surveyToUpdate;
   }
 
   private extractEmailFromCookie(cookieHeader: string): string | null {
