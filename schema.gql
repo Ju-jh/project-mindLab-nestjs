@@ -55,6 +55,12 @@ type Question {
   createdAt: DateTime!
 }
 
+type postQuestionrResponse {
+  success: Boolean!
+  message: String!
+  q_id: String!
+}
+
 type getSurveysResponse {
   success: Boolean!
   message: String!
@@ -97,7 +103,7 @@ type Mutation {
   updateMySurveyDescription(surveyId: String!, newDescription: String!): postSurveyResponse!
   updateMySurveyIsPublic(surveyId: String!): postSurveyResponse!
   checkMySurveyIsPublic(surveyId: String!): getSurveyisPublicResponse!
-  createQuestion(surveyId: String!): Question!
+  createQuestion(surveyId: String!): postQuestionrResponse!
   updateQuestionText(surveyId: String!, questionId: String!, newText: String!): [Question!]!
   deleteQuestion(surveyId: String!, questionId: String!): [Question!]!
   createOption(surveyId: String!, questionId: String!): Option!

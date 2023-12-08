@@ -1,5 +1,4 @@
 import { Resolver, Mutation, Query, Context, Args } from '@nestjs/graphql';
-import { Survey } from './survey.entity';
 import { SurveyService } from './survey.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
 import { UserService } from 'src/user/user.service';
@@ -233,10 +232,10 @@ export class SurveyResolver {
         public: isSurveyPublic.public,
       };
     } catch (error) {
-      console.error('나의 설문지의 Public(Private)여부가 확인에 실패:', error);
+      console.error('나의 설문지의 Public(Private)여부 확인에 실패:', error);
       return {
         success: false,
-        message: '나의 설문지의 Public(Private)여부가 확인에 실패했습니다.',
+        message: '나의 설문지의 Public(Private)여부 확인에 실패했습니다.',
         public: isSurveyPublic.public,
       };
     }

@@ -3,6 +3,7 @@ import { Question } from './question.entity';
 import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
+import { postQuestionrResponse } from './dto/post-question-dto';
 
 interface UserPayload extends JwtPayload {
   user: {
@@ -16,19 +17,30 @@ export class QuestionResolver {
     private readonly userService: UserService,
   ) {}
 
-  @Mutation(() => Question)
+  @Mutation(() => postQuestionrResponse)
   async createQuestion(
     @Args('surveyId') surveyId: string,
     @Context('req') req,
-  ): Promise<Question> {
+  ): Promise<postQuestionrResponse> {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const createdSurvey = await this.questionService.createQuestion(
-      userId,
-      surveyId,
-    );
-    return createdSurvey;
+    const result = await this.questionService.createQuestion(userId, surveyId);
+    try {
+      result;
+      return {
+        success: true,
+        message: '문제가 성공적으로 삭제되었습니다.',
+        q_id: result.q_id,
+      };
+    } catch (error) {
+      console.error('문제 삭제 실패:', error);
+      return {
+        success: false,
+        message: '문제 삭제에 실패했습니다.',
+        q_id: result.q_id,
+      };
+    }
   }
 
   @Query(() => [Question])

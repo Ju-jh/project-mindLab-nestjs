@@ -4,7 +4,7 @@ import { User } from './user.entity';
 import { UserService } from './user.service';
 import { UserController } from './user.controller';
 import { PassportModule } from '@nestjs/passport';
-import { GoogleStrategy } from './google.stratgy';
+import { GoogleStrategy } from './auth/google.stratgy';
 
 @Module({
   imports: [
