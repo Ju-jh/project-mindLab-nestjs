@@ -34,26 +34,43 @@ export class AnswerService {
     const survey = await this.surveyRepository.findOne({
       where: { s_id: surveyId },
     });
-    const answerEntities = await Promise.all(
+
+    await Promise.all(
       answers.map(async (answer) => {
-        const question = await this.questionRepository.findOne({
-          where: { q_id: answer.questionId },
-        });
-        const option = await this.optionRepository.findOne({
-          where: { o_id: answer.optionId },
+        const { questionId, optionId, score } = answer;
+
+        const existingAnswer = await this.answerRepository.findOne({
+          where: {
+            user: { u_id: userId },
+            survey: { s_id: surveyId },
+            question: { q_id: questionId },
+          },
         });
 
-        const answerEntity = new Answer();
-        answerEntity.user = user;
-        answerEntity.survey = survey;
-        answerEntity.question = question;
-        answerEntity.option = option;
-        answerEntity.score = answer.score;
-        return answerEntity;
+        if (existingAnswer) {
+          existingAnswer.option = await this.optionRepository.findOne({
+            where: { o_id: optionId },
+          });
+          existingAnswer.score = score;
+          await this.answerRepository.save(existingAnswer);
+        } else {
+          const question = await this.questionRepository.findOne({
+            where: { q_id: questionId },
+          });
+          const option = await this.optionRepository.findOne({
+            where: { o_id: optionId },
+          });
+
+          const newAnswer = new Answer();
+          newAnswer.user = user;
+          newAnswer.survey = survey;
+          newAnswer.question = question;
+          newAnswer.option = option;
+          newAnswer.score = score;
+          await this.answerRepository.save(newAnswer);
+        }
       }),
     );
-
-    await this.answerRepository.save(answerEntities);
   }
 
   async getAnswers(surveyId: string, userId: string): Promise<Answer[]> {

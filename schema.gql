@@ -137,8 +137,6 @@ type Mutation {
 }
 
 input AnswerInput {
-  userId: String!
-  surveyId: String!
   questionId: String!
   optionId: String!
   score: Float!
