@@ -3,6 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Survey } from './survey.entity';
 import { Repository } from 'typeorm';
 import { Answer } from 'src/answer/answer.entity';
+import { Question } from 'src/question/question.entity';
+import { Option } from 'src/option/option.entity';
 
 @Injectable()
 export class SurveyService {
@@ -13,6 +15,10 @@ export class SurveyService {
     private surveyRepository: Repository<Survey>,
     @InjectRepository(Answer)
     private answerRepository: Repository<Answer>,
+    @InjectRepository(Question)
+    private questionRepository: Repository<Question>,
+    @InjectRepository(Option)
+    private optionRepository: Repository<Option>,
   ) {}
 
   private handleQueryError(
@@ -139,6 +145,8 @@ export class SurveyService {
       });
 
       if (survey) {
+        await this.optionRepository.delete({ survey: { s_id: surveyId } });
+        await this.questionRepository.delete({ survey: { s_id: surveyId } });
         await this.answerRepository.delete({ survey: { s_id: surveyId } });
         await this.surveyRepository.remove(survey);
         return { success: true };
