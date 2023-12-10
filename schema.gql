@@ -10,6 +10,7 @@ type Survey {
   user: User!
   questions: [Question!]!
   answers: [Answer!]!
+  options: [Option!]!
   createdAt: DateTime!
 }
 
@@ -19,7 +20,7 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 scalar DateTime
 
 type Question {
-  q_id: ID!
+  q_id: String!
   text: String!
   survey: Survey!
   options: [Option!]
@@ -105,6 +106,12 @@ type SaveAnswerResponse {
   message: String!
 }
 
+type GetAnswerResponse {
+  success: Boolean!
+  message: String!
+  answers: [Answer!]!
+}
+
 type Query {
   getMySurvey: getSurveysResponse!
   getPublicSurvey: getSurveysResponse!
@@ -126,9 +133,12 @@ type Mutation {
   updateOptionTextAndScore(optionId: String!, newText: String!, newScore: Float!): postOptionResponse!
   deleteOption(optionId: String!): postOptionResponse!
   saveAnswers(surveyId: String!, answers: [AnswerInput!]!): SaveAnswerResponse!
+  getAnswers(surveyId: String!): GetAnswerResponse!
 }
 
 input AnswerInput {
+  userId: String!
+  surveyId: String!
   questionId: String!
   optionId: String!
   score: Float!

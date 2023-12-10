@@ -14,11 +14,11 @@ import {
 @Entity('question')
 @ObjectType()
 export class Question {
-  @Field(() => ID)
+  @Field(() => String)
   @PrimaryGeneratedColumn('uuid')
   q_id: string;
 
-  @Field()
+  @Field(() => String)
   @Column({ default: '' })
   text: string;
 
@@ -34,7 +34,7 @@ export class Question {
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
 
-  @Field()
+  @Field(() => Date)
   @CreateDateColumn()
   createdAt: Date;
 }

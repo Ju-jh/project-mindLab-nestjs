@@ -1,5 +1,4 @@
 import { Args, Context, Mutation, Resolver, Query } from '@nestjs/graphql';
-import { Question } from './question.entity';
 import { UserService } from 'src/user/user.service';
 import { QuestionService } from './question.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
@@ -32,14 +31,14 @@ export class QuestionResolver {
       result;
       return {
         success: true,
-        message: '문제가 성공적으로 삭제되었습니다.',
+        message: '문제가 성공적으로 생성되었습니다.',
         q_id: result.q_id,
       };
     } catch (error) {
-      console.error('문제 삭제 실패:', error);
+      console.error('문제 생성 실패:', error);
       return {
         success: false,
-        message: '문제 삭제에 실패했습니다.',
+        message: '문제 생성에 실패했습니다.',
         q_id: result.q_id,
       };
     }
@@ -53,19 +52,22 @@ export class QuestionResolver {
     const cookieHeader = await req.headers.cookie;
     const userEmail = this.extractEmailFromCookie(cookieHeader);
     const userId = await this.userService.findUserIdByEmail(userEmail);
-    const result = await this.questionService.getAllQuestions(userId, surveyId);
+    const Questions = await this.questionService.getAllQuestions(
+      userId,
+      surveyId,
+    );
     try {
       return {
         success: true,
         message: '모든 문제가 성공적으로 로드되었습니다.',
-        questions: result,
+        questions: Questions,
       };
     } catch (error) {
       console.error('모든 문제 로드 실패:', error);
       return {
         success: false,
         message: '모든 문제 로드에 실패했습니다.',
-        questions: result,
+        questions: Questions,
       };
     }
   }
@@ -109,7 +111,7 @@ export class QuestionResolver {
       );
       return {
         success: true,
-        message: '문제 제목이 성공적으로 스정되었습니다.',
+        message: '문제 제목이 성공적으로 수정되었습니다.',
       };
     } catch (error) {
       console.error('문제 제목 수정 실패:', error);

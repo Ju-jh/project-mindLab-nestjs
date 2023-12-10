@@ -19,5 +19,6 @@ import { UserModule } from 'src/user/user.module';
     OptionModule,
   ],
   providers: [AnswerResolver, AnswerService, UserService],
+  exports: [TypeOrmModule],
 })
 export class AnswerModule {}

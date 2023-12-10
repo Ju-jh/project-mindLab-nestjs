@@ -4,11 +4,11 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Answer } from './answer.entity';
-import { AnswerInput } from './answer.input';
 import { Survey } from 'src/survey/survey.entity';
 import { Question } from 'src/question/question.entity';
 import { Option } from 'src/option/option.entity';
 import { User } from 'src/user/user.entity';
+import { AnswerInput } from './answer.input';
 
 @Injectable()
 export class AnswerService {
@@ -54,7 +54,19 @@ export class AnswerService {
     );
 
     await this.answerRepository.save(answerEntities);
+  }
 
-    await this.answerRepository.save(answerEntities);
+  async getAnswers(surveyId: string, userId: string): Promise<Answer[]> {
+    const answers = await this.answerRepository.find({
+      where: {
+        survey: { s_id: surveyId },
+        user: { u_id: userId },
+      },
+      relations: ['question', 'option'],
+    });
+
+    console.log(answers);
+
+    return answers;
   }
 }

@@ -2,6 +2,7 @@ import { Field, ID, ObjectType } from '@nestjs/graphql';
 import { Answer } from 'src/answer/answer.entity';
 import { Question } from 'src/question/question.entity';
 import { User } from 'src/user/user.entity';
+import { Option } from 'src/option/option.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -9,6 +10,8 @@ import {
   ManyToOne,
   OneToMany,
   CreateDateColumn,
+  JoinTable,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity('survey')
@@ -18,11 +21,11 @@ export class Survey {
   @PrimaryGeneratedColumn('uuid')
   s_id: string;
 
-  @Field()
+  @Field(() => String)
   @Column({ default: '무제' })
   title: string;
 
-  @Field()
+  @Field(() => String)
   @Column({ default: '' })
   description: string;
 
@@ -35,12 +38,17 @@ export class Survey {
   user: User;
 
   @Field(() => [Question])
-  @OneToMany(() => Question, (question) => question.survey)
+  @OneToMany(() => Question, (question) => question.survey, { cascade: true })
   questions: Question[];
 
   @Field(() => [Answer])
   @OneToMany(() => Answer, (answer) => answer.user)
   answers: Answer[];
+
+  @Field(() => [Option])
+  @ManyToMany(() => Option, { cascade: true })
+  @JoinTable()
+  options: Option[];
 
   @Field()
   @CreateDateColumn()

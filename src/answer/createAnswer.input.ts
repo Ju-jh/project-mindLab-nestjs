@@ -1,7 +1,8 @@
+// answer.input.ts
 import { InputType, Field } from '@nestjs/graphql';
 
 @InputType()
-export class AnswerInput {
+export class CreateAnswerInput {
   @Field()
   userId: string;
 

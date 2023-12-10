@@ -2,7 +2,6 @@ import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { OptionService } from './option.service';
 import { UserService } from 'src/user/user.service';
 import { JwtPayload, verify } from 'jsonwebtoken';
-import { Option } from './option.entity';
 import { postOptionResponse } from './dto/post-option-dto';
 
 interface UserPayload extends JwtPayload {

@@ -10,7 +10,6 @@ import {
   CreateDateColumn,
   Column,
 } from 'typeorm';
-
 @Entity('answer')
 @ObjectType()
 export class Answer {
